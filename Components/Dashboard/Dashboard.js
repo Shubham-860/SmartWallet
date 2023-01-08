@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View} from "react-native";
+import {ScrollView, StyleSheet, TouchableOpacity} from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
 import Account from "./Modules/Account";
 import ExpensesStructure from "./Modules/ExpensesStructure";
@@ -15,8 +15,7 @@ const Dashboard = () => {
             <NewRecord/>
 
 
-        {/*Add Button*/}
-
+            {/*Add Button*/}
             <TouchableOpacity style={styles.addBtn}>
                 <Ionicons name={"add-sharp"} color={'white'} size={50}/>
             </TouchableOpacity>
@@ -25,17 +24,17 @@ const Dashboard = () => {
     )
 }
 
-const styles=StyleSheet.create({
-addBtn:{
-    position:'absolute',
-    right:20,
-    bottom:20,
-    backgroundColor:'#37fae2',
-    borderRadius:50,
-    width:52,
-    height:52,
-    alignItems:"center"
-}
+const styles = StyleSheet.create({
+    addBtn: {
+        position: 'absolute',
+        right: 20,
+        bottom: 20,
+        backgroundColor: '#37fae2',
+        borderRadius: 50,
+        width: 52,
+        height: 52,
+        alignItems: "center"
+    }
 });
 
 export default Dashboard;
