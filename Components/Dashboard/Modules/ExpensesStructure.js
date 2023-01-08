@@ -32,28 +32,28 @@ const ExpensesStructure = () => {
             <View>
                 <View style={{flexDirection: 'row', paddingLeft: 20}}>
                     <Ionicons name={'ellipse'} color={'red'} size={20}/>
-                    <Text style={[GlobalStyle.text,{paddingLeft:15}]}>Food</Text>
+                    <Text style={[GlobalStyle.text, {paddingLeft: 15}]}>Food</Text>
                 </View>
             </View>
 
             <View>
                 <View style={{flexDirection: 'row', paddingLeft: 20}}>
                     <Ionicons name={'ellipse'} color={'blue'} size={20}/>
-                    <Text style={[GlobalStyle.text,{paddingLeft:15}]}>Vehicle</Text>
+                    <Text style={[GlobalStyle.text, {paddingLeft: 15}]}>Vehicle</Text>
                 </View>
             </View>
 
             <View>
                 <View style={{flexDirection: 'row', paddingLeft: 20}}>
                     <Ionicons name={'ellipse'} color={'green'} size={20}/>
-                    <Text style={[GlobalStyle.text,{paddingLeft:15}]}>Financial</Text>
+                    <Text style={[GlobalStyle.text, {paddingLeft: 15}]}>Financial</Text>
                 </View>
             </View>
 
             <View>
                 <View style={{flexDirection: 'row', paddingLeft: 20}}>
                     <Ionicons name={'ellipse'} color={'yellow'} size={20}/>
-                    <Text style={[GlobalStyle.text,{paddingLeft:15}]}>Other</Text>
+                    <Text style={[GlobalStyle.text, {paddingLeft: 15}]}>Other</Text>
                 </View>
             </View>
 

@@ -1,14 +1,12 @@
-import {StyleSheet, Text, View} from 'react-native';
-import GlobalStyle from "./Components/Style/GlobalStyle";
+import {StyleSheet} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Dashboard from "./Components/Dashboard/Dashboard";
 import {NavigationContainer} from "@react-navigation/native";
 import Profile from "./Components/User/Profile";
 import Login from "./Components/User/Login";
-import FixColors from './Components/FixColors';
 
 const Drawer = createDrawerNavigator();
-    let login = true
+let login = true
 export default function App() {
     return (
         <NavigationContainer>
@@ -16,17 +14,17 @@ export default function App() {
 
                 initialRouteName={'Dashboard'}
                 screenOptions={{
-                    drawerStyle:{
+                    drawerStyle: {
                         backgroundColor: 'black',
                     },
-                    drawerLabelStyle:{
-                      fontSize: 20,
+                    drawerLabelStyle: {
+                        fontSize: 20,
                     },
-                    drawerActiveTintColor:"#33d6f3",
-                    drawerActiveBackgroundColor:"#2e2d2d",
-                    drawerInactiveTintColor:'#858585',
-                    headerStyle:{
-                        backgroundColor:'#2e2d2d',
+                    drawerActiveTintColor: "#33d6f3",
+                    drawerActiveBackgroundColor: "#2e2d2d",
+                    drawerInactiveTintColor: '#858585',
+                    headerStyle: {
+                        backgroundColor: '#2e2d2d',
                     },
                     headerTintColor: 'white',
 
@@ -37,7 +35,7 @@ export default function App() {
             >
                 <Drawer.Screen name="Profile" component={Profile}/>
                 <Drawer.Screen name="Dashboard" component={Dashboard}/>
-                <Drawer.Screen name={!login?"Login":'Logout'} component={Login}/>
+                <Drawer.Screen name={!login ? "Login" : 'Logout'} component={Login}/>
             </Drawer.Navigator>
         </NavigationContainer>
     );
