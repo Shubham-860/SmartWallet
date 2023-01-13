@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import {Platform, StyleSheet} from "react-native";
 
 const GlobalStyle = StyleSheet.create({
     text: {
@@ -12,10 +12,22 @@ const GlobalStyle = StyleSheet.create({
     mainBody: {
         flex: 1,
         paddingTop: 0,
+        backgroundColor: '#2E2D2D',
+    },
+    body: {
         backgroundColor: 'black',
+        padding: 20,
+        borderRadius: 20,
+        marginVertical: 5
+    },
+    firstBody: {
+        backgroundColor: 'black',
+        padding: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20
     },
     textHeading: {
-        fontSize: 25,
+        fontSize: 24,
         color: 'white',
         fontWeight: "bold"
     }

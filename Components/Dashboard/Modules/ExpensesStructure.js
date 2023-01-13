@@ -12,7 +12,7 @@ const ExpensesStructure = () => {
 
     };
     return (
-        <View style={styles.body}>
+        <View style={GlobalStyle.body}>
             <Text style={GlobalStyle.textHeading}>
                 Expenses Structure
             </Text>
@@ -62,12 +62,7 @@ const ExpensesStructure = () => {
     )
 }
 const styles = StyleSheet.create({
-    body: {
-        backgroundColor: '#2E2D2D',
-        padding: 20,
-        borderRadius: 20,
-        marginVertical: 5
-    },
+
     text: {
         color: 'white',
         fontSize: 20,

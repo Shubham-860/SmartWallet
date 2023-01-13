@@ -1,15 +1,18 @@
-import {ScrollView, StyleSheet, TouchableOpacity} from "react-native";
+import {ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
 import Account from "./Modules/Account";
 import ExpensesStructure from "./Modules/ExpensesStructure";
 import LastRecordsOverview from "./Modules/LastRecordsOverview";
 import NewRecord from "./Modules/NewRecord";
 import {Ionicons} from "@expo/vector-icons";
+import CustomIconButton from "../Utils/CustomIconButton";
+import Exp_Inc from "./Modules/Exp_Inc";
 
-const Dashboard = () => {
+const Dashboard = ({navigation}) => {
     return (
         <ScrollView style={GlobalStyle.mainBody}>
             <Account/>
+
             <ExpensesStructure/>
             <LastRecordsOverview/>
             <NewRecord/>

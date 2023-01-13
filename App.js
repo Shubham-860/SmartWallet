@@ -2,8 +2,10 @@ import {StyleSheet} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Dashboard from "./Components/Dashboard/Dashboard";
 import {NavigationContainer} from "@react-navigation/native";
-import Profile from "./Components/User/Profile";
+    import Profile from "./Components/User/Profile";
 import Login from "./Components/User/Login";
+import Exp_Inc from "./Components/Dashboard/Modules/Exp_Inc";
+import AllRecords from "./Components/Dashboard/Modules/AllRecords";
 
 const Drawer = createDrawerNavigator();
 let login = true
@@ -12,7 +14,8 @@ export default function App() {
         <NavigationContainer>
             <Drawer.Navigator
 
-                initialRouteName={'Dashboard'}
+                // initialRouteName={'Dashboard'}
+                initialRouteName={'Exp_Inc'}
                 screenOptions={{
                     drawerStyle: {
                         backgroundColor: 'black',
@@ -27,15 +30,14 @@ export default function App() {
                         backgroundColor: '#2e2d2d',
                     },
                     headerTintColor: 'white',
-
-
                 }
-
                 }
             >
                 <Drawer.Screen name="Profile" component={Profile}/>
                 <Drawer.Screen name="Dashboard" component={Dashboard}/>
-                <Drawer.Screen name={!login ? "Login" : 'Logout'} component={Login}/>
+                <Drawer.Screen name='Logout' component={Login}/>
+                <Drawer.Screen name='All Records' component={AllRecords}/>
+                <Drawer.Screen name="Exp_Inc" component={Exp_Inc}/>
             </Drawer.Navigator>
         </NavigationContainer>
     );

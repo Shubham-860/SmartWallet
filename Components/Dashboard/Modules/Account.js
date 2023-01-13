@@ -2,13 +2,14 @@ import {StyleSheet, Text, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
 import CustomButton from "../../Utils/CustomButton";
 
-const Account = () => {
+const Account = ({navigation}) => {
 
     const adjustBalance = () => {
         console.log("adjustBalance")
     };
     const viewRecords = () => {
-        console.log("viewRecords")
+        console.log("viewRecords");
+        navigation.navigate('Profile')
 
     };
     return (
@@ -39,7 +40,7 @@ const Account = () => {
 }
 const styles = StyleSheet.create({
     body: {
-        backgroundColor: '#2E2D2D',
+        backgroundColor: 'black',
         padding: 20,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20

@@ -1,29 +1,47 @@
-import {Image, StyleSheet, Text, View} from "react-native";
+import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
 import {Ionicons} from "@expo/vector-icons";
 import Record from "./SubModules/Record";
 
-const LastRecordsOverview=({navigation})=>{
+const AllRecords=({navigation})=>{
 
     return (
-        <View style={GlobalStyle.body}>
-            <View>
+        <View style={GlobalStyle.mainBody}>
+            <View style={styles.body}>
                 <Text style={GlobalStyle.textHeading}>
-                    Last Records Overview
+                    All Records
                 </Text>
-            </View>
+
+                <ScrollView>
 
             <Record />
             <Record />
             <Record />
             <Record />
             <Record />
+            <Record />
+            <Record />
+            <Record />
+            <Record />
+            <Record />
+            <Record />
+            <Record />
+            <Record />
+            <Record />
+            <Record />
+                </ScrollView>
+        </View>
 
         </View>
     )
 }
 const styles = StyleSheet.create({
-
+    body: {
+        backgroundColor: 'black',
+        padding: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20
+    },
     text: {
         color: 'white',
         fontSize: 20,
@@ -48,4 +66,4 @@ const styles = StyleSheet.create({
         height: 250
     }
 });
-export default LastRecordsOverview;
+export default AllRecords;
