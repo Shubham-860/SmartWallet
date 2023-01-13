@@ -61,8 +61,9 @@ const Exp_Inc = ({navigation}) => {
 
                 {/*moneyNumber*/}
                 <View style={styles.moneyNumberView}>
-                    <Text style={[styles.moneyNumber, {fontWeight: '400'}]}>₹{income ? ' + ' : ' - '}</Text>
+                    <Text style={[styles.moneyNumber, {fontWeight: '400'}]}>₹{income ? ' +' : ' -'}</Text>
                     <TextInput
+                        clearTextOnFocus={true}
                         value={money}
                         keyboardType={"numeric"}
                         style={styles.moneyNumber}
@@ -233,7 +234,8 @@ const styles = StyleSheet.create({
         fontSize: 50,
         fontWeight: "bold",
         textAlign: "right",
-        paddingStart: 20
+        paddingStart: 10,
+        marginEnd:5
     },
     moneyNumberView: {
         marginBottom: 20,
