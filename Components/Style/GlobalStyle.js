@@ -12,13 +12,15 @@ const GlobalStyle = StyleSheet.create({
     mainBody: {
         flex: 1,
         paddingTop: 0,
+        paddingHorizontal:3,
         backgroundColor: '#2E2D2D',
     },
     body: {
         backgroundColor: 'black',
         padding: 20,
         borderRadius: 20,
-        marginVertical: 5
+        marginVertical: 5,
+
     },
     firstBody: {
         backgroundColor: 'black',

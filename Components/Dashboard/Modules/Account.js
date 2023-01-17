@@ -1,8 +1,15 @@
-import {StyleSheet, Text, View} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
 import CustomButton from "../../Utils/CustomButton";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_TOTAL_BALANCE } from "../../Redux/Actions";
 
-const Account = ({navigation}) => {
+
+
+const Account = ({ navigation }) => {
+
+    const { totalBalance } = useSelector(state => state.userReducer)
+    const dispatch =useDispatch();
 
     const adjustBalance = () => {
         console.log("adjustBalance")
@@ -15,10 +22,10 @@ const Account = ({navigation}) => {
     return (
         <View style={styles.body}>
             <Text style={GlobalStyle.textHeading}>
-                Account
+                Balance
             </Text>
             <Text style={styles.text}>
-                ₹ {"10000"}
+                ₹ {totalBalance}
             </Text>
             <View style={styles.btn}>
                 <CustomButton

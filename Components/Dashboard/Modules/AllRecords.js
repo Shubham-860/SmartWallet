@@ -1,36 +1,53 @@
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {FlatList, Image, LogBox, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
 import {Ionicons} from "@expo/vector-icons";
 import Record from "./SubModules/Record";
+import {useSelector} from "react-redux";
+import {useEffect} from "react";
 
 const AllRecords=({navigation})=>{
 
+    const {db} = useSelector(state => state.userReducer)
+    // console.log(db)
+    useEffect(() => {
+        LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
+    }, [db])
     return (
-        <View style={GlobalStyle.mainBody}>
-            <View style={styles.body}>
+        <View style={[GlobalStyle.mainBody]}>
+<View style={[GlobalStyle.body]}>
+
+            <View>
                 <Text style={GlobalStyle.textHeading}>
                     All Records
                 </Text>
+            </View>
 
-                <ScrollView>
+            <View>
 
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-                </ScrollView>
-        </View>
+                <FlatList
+                    scrollsToTop={true}
+                    inverted={true}
+                    data={db}
+                    // key={index}
+                    renderItem={
+                        rec => {
+                            return (
+                                <TouchableOpacity >
+                                    <Record
+                                        iconCategory={rec.item.iconCategory}
+                                        description={rec.item.description}
+                                        income={rec.item.income}
+                                        money={rec.item.money}
+                                    />
+                                </TouchableOpacity>
+
+                            )
+                        }
+                    }
+                />
+            </View>
+
+</View>
 
         </View>
     )

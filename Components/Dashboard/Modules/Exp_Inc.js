@@ -105,8 +105,11 @@ const Exp_Inc = ({navigation}) => {
                         selectedValue={selectedCategory}
                         mode={'dropdown'}
                         dropdownIconColor={'white'}
-                        onValueChange={(itemValue, itemIndex) =>
-                            setSelectedCategory(itemValue)
+                        onValueChange={(itemValue, itemIndex) => {
+                            setSelectedCategory(itemValue);
+                            console.log(itemValue)
+                            console.log(itemIndex)
+                        }
                         }>
                         <Picker.Item style={styles.pickerItem} label="Food & Drinks" value="Food & Drinks"/>
                         <Picker.Item style={styles.pickerItem} label="Shopping" value="Shopping"/>

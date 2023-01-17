@@ -1,23 +1,55 @@
-import {Image, StyleSheet, Text, View} from "react-native";
+import {FlatList, LogBox, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
-import {Ionicons} from "@expo/vector-icons";
 import Record from "./SubModules/Record";
+import {useSelector} from "react-redux";
+import {useEffect} from "react";
+import AllRecords from "./AllRecords";
 
-const LastRecordsOverview=({navigation})=>{
 
+const LastRecordsOverview = (props,{navigation}) => {
+
+    const {db} = useSelector(state => state.userReducer)
+    // console.log(db)
+    useEffect(() => {
+        LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
+    }, [db])
     return (
-        <View style={GlobalStyle.body}>
+        <View style={[GlobalStyle.body, {flex: 1}]}>
             <View>
                 <Text style={GlobalStyle.textHeading}>
                     Last Records Overview
                 </Text>
             </View>
 
-            <Record />
-            <Record />
-            <Record />
-            <Record />
-            <Record />
+            <View style={{flex: 1}}>
+
+                <FlatList
+                    scrollEnabled={false}
+                    initialNumToRender={5}
+                    inverted={true}
+                    data={db.filter((val, ind) => ind < 5)}
+                    // key={index}
+                    renderItem={
+                        rec => {
+                            return (
+                                <TouchableOpacity >
+                                    <Record
+                                        iconCategory={rec.item.iconCategory}
+                                        description={rec.item.description}
+                                        income={rec.item.income}
+                                        money={rec.item.money}
+                                    />
+                                </TouchableOpacity>
+
+                            )
+                        }
+                    }
+                />
+            </View>
+            <TouchableOpacity onPress={()=>this.props.navigation.navigate('Exp_Inc')}>
+                <Text style={[GlobalStyle.text, {color: 'dodgerblue', fontSize: 18, paddingLeft: 5, marginTop: 5}]}>Show
+                    All</Text>
+            </TouchableOpacity>
 
         </View>
     )
