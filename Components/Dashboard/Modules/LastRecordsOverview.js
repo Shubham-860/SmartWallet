@@ -10,11 +10,11 @@ const LastRecordsOverview = (props,{navigation}) => {
 
     const {db} = useSelector(state => state.userReducer)
     // console.log(db)
-    useEffect(() => {
-        LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
-    }, [db])
+    // useEffect(() => {
+    //     LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
+    // }, [db])
     return (
-        <View style={[GlobalStyle.body, {flex: 1}]}>
+        <View style={[GlobalStyle.body, {flex: 1,height:"100%",width:'100%'}]}>
             <View>
                 <Text style={GlobalStyle.textHeading}>
                     Last Records Overview
