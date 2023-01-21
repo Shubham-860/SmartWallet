@@ -1,16 +1,24 @@
-import {Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
 import CustomIconButton from "../../Utils/CustomIconButton";
-import {Picker} from "@react-native-picker/picker";
-import {useEffect, useState} from "react";
+import { Picker } from "@react-native-picker/picker";
+import { useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Record from "./SubModules/Record";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_TOTAL_BALANCE, SET_DB, setDB } from "../../Redux/Actions";
 
 
-const Exp_Inc = ({navigation}) => {
+const Exp_Inc = ({ navigation }) => {
+
+    const { db, totalBalance } = useSelector(state => state.userReducer)
+    const dispatch = useDispatch();
+
     // Income / Expense
     const [income, setIncome] = useState(false)
     // picker
-    const [selectedCategory, setSelectedCategory] = useState();
+    const [selectedCategory, setSelectedCategory] = useState('Food & Drinks');
+    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0)
     // desc
     const [desc, setDesc] = useState('');
     // money
@@ -50,18 +58,32 @@ const Exp_Inc = ({navigation}) => {
         console.log("close");
         navigation.navigate('Dashboard');
     }
+
+
+
     const add = () => {
         console.log("add")
+        dispatch(setDB([...db, {
+                money: money,
+                income: income,
+                iconCategory: selectedCategory,
+                iconIndex: selectedCategoryIndex,
+                description: desc,
+                date: selectedDate,
+                time: selectedTime,
+            }]
+        ));
+        navigation.navigate('All Records');
     }
 
     return (
         <View style={GlobalStyle.mainBody}>
-            <View style={[GlobalStyle.firstBody, {borderBottomLeftRadius: 30, borderBottomRightRadius: 30}]}>
+            <View style={[GlobalStyle.firstBody, { borderBottomLeftRadius: 30, borderBottomRightRadius: 30}]}>
 
 
                 {/*moneyNumber*/}
                 <View style={styles.moneyNumberView}>
-                    <Text style={[styles.moneyNumber, {fontWeight: '400'}]}>₹{income ? ' +' : ' -'}</Text>
+                    <Text style={[styles.moneyNumber, { fontWeight: '400' }]}>₹{income ? ' +' : ' -'}</Text>
                     <TextInput
                         clearTextOnFocus={true}
                         value={money}
@@ -106,25 +128,25 @@ const Exp_Inc = ({navigation}) => {
                         mode={'dropdown'}
                         dropdownIconColor={'white'}
                         onValueChange={(itemValue, itemIndex) => {
-                            setSelectedCategory(itemValue);
-                            console.log(itemValue)
-                            console.log(itemIndex)
+                            setSelectedCategory(itemValue)
+                            setSelectedCategoryIndex(itemIndex)
+                            console.log(selectedCategory)
+                            // console.log(selectedCategoryIndex)
                         }
                         }>
-                        <Picker.Item style={styles.pickerItem} label="Food & Drinks" value="Food & Drinks"/>
-                        <Picker.Item style={styles.pickerItem} label="Shopping" value="Shopping"/>
-                        <Picker.Item style={styles.pickerItem} label="Housing" value="Housing"/>
-                        <Picker.Item style={styles.pickerItem} label="Transportation" value="Transportation"/>
-                        <Picker.Item style={styles.pickerItem} label="Vehicle" value="Vehicle"/>
+                        <Picker.Item style={styles.pickerItem} label="Food & Drinks" value="Food & Drinks" />
+                        <Picker.Item style={styles.pickerItem} label="Shopping" value="Shopping" />
+                        <Picker.Item style={styles.pickerItem} label="Housing" value="Housing" />
+                        <Picker.Item style={styles.pickerItem} label="Transportation, Vehicle" value="Transportation" />
                         <Picker.Item style={styles.pickerItem} label="Life & Entertainment"
-                                     value="Life & Entertainment"/>
+                                     value="Life & Entertainment" />
                         <Picker.Item style={styles.pickerItem} label="Financial expenses"
-                                     value="Financial expenses"/>
+                                     value="Financial expenses" />
                         <Picker.Item style={styles.pickerItem} label="Communication, PC, SmartPhone"
-                                     value="Communication, PC, SmartPhone"/>
-                        <Picker.Item style={styles.pickerItem} label="Investments" value="Investments"/>
-                        <Picker.Item style={styles.pickerItem} label="Income" value="Income"/>
-                        <Picker.Item style={styles.pickerItem} label="Others" value="Others"/>
+                                     value="Communication, PC, SmartPhone" />
+                        <Picker.Item style={styles.pickerItem} label="Investments" value="Investments" />
+                        <Picker.Item style={styles.pickerItem} label="Income" value="Income" />
+                        <Picker.Item style={styles.pickerItem} label="Others" value="Others" />
                     </Picker>
                 </View>
 
@@ -151,7 +173,7 @@ const Exp_Inc = ({navigation}) => {
                     <Text style={[GlobalStyle.textHeading, styles.textHeading]}>
                         Date
                     </Text>
-                    <TouchableOpacity style={[{justifyContent: 'center'}, styles.touchableOpacity]}
+                    <TouchableOpacity style={[{ justifyContent: 'center' }, styles.touchableOpacity]}
                                       onPress={toggleDatePicker}>
                         {isDatePickerVisible && (
                             <DateTimePicker
@@ -171,7 +193,7 @@ const Exp_Inc = ({navigation}) => {
                                 }}
                             />
                         )}
-                        <Text style={[GlobalStyle.textHeading, styles.textHeading, {width: "100%"}]}>
+                        <Text style={[GlobalStyle.textHeading, styles.textHeading, { width: "100%" }]}>
                             {selectedDate.toLocaleDateString('en-IN', {
                                 day: '2-digit',
                                 month: '2-digit',
@@ -190,7 +212,7 @@ const Exp_Inc = ({navigation}) => {
                         Time
                     </Text>
 
-                    <TouchableOpacity style={[{justifyContent: 'center'}, styles.touchableOpacity]}
+                    <TouchableOpacity style={[{ justifyContent: 'center' }, styles.touchableOpacity]}
                                       onPress={toggleTimePicker}>
                         {isTimePickerVisible && (
                             <DateTimePicker
@@ -208,7 +230,7 @@ const Exp_Inc = ({navigation}) => {
                             />
                         )}
 
-                        <Text style={[GlobalStyle.textHeading, styles.textHeading, {width: "100%"}]}>
+                        <Text style={[GlobalStyle.textHeading, styles.textHeading, { width: "100%" }]}>
                             {`${hours}:${minutes} ${ampm}`}
                         </Text>
                     </TouchableOpacity>
@@ -217,13 +239,40 @@ const Exp_Inc = ({navigation}) => {
                 </View>
 
                 {/* add close Buttons*/}
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20}}>
-                    <CustomIconButton name={'close-sharp'} color={'orange'} size={50} onPressFunction={close}/>
-                    <CustomIconButton name={'checkmark-sharp'} color={'green'} size={50} onPressFunction={add}/>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, marginVertical: 30 }}>
+                    <CustomIconButton name={'close-sharp'} color={'orange'} size={50} onPressFunction={close} />
+                    <CustomIconButton name={'checkmark-sharp'} color={'green'} size={50} onPressFunction={add} />
                 </View>
 
 
+
+
+
+
             </View>
+
+            {/* Record */}
+
+            {/*<View style={{ flex: 1 }} >*/}
+
+            {/*    <FlatList*/}
+            {/*        inverted={true}*/}
+            {/*        data={db}*/}
+            {/*        // key={index}*/}
+            {/*        renderItem={*/}
+            {/*            rec => {*/}
+            {/*                return (*/}
+            {/*                    <Record*/}
+            {/*                        iconCategory={rec.item.iconCategory}*/}
+            {/*                        description={rec.item.description}*/}
+            {/*                        income={rec.item.income}*/}
+            {/*                        money={rec.item.money}*/}
+            {/*                    />*/}
+            {/*                )*/}
+            {/*            }*/}
+            {/*        }*/}
+            {/*    />*/}
+            {/*</View>*/}
         </View>
     )
 }
@@ -238,7 +287,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "right",
         paddingStart: 10,
-        marginEnd:5
+        marginEnd: 5
     },
     moneyNumberView: {
         marginBottom: 20,

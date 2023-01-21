@@ -1,6 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 
-const CustomButton = (props) => {
+const CustomButton = (props,{navigation}) => {
     return (
         <View>
             <TouchableOpacity

@@ -1,53 +1,54 @@
-import {FlatList, Image, LogBox, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, Image, LogBox, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
 import {Ionicons} from "@expo/vector-icons";
 import Record from "./SubModules/Record";
 import {useSelector} from "react-redux";
-import {useEffect} from "react";
+import {useEffect, useRef, useState} from "react";
 
-const AllRecords=({navigation})=>{
+const AllRecords = () => {
+
+
 
     const {db} = useSelector(state => state.userReducer)
-    // console.log(db)
-    useEffect(() => {
-        LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
-    }, [db])
+
+
+
     return (
         <View style={[GlobalStyle.mainBody]}>
-<View style={[GlobalStyle.body]}>
+            <View style={[GlobalStyle.body]}>
 
-            <View>
-                <Text style={GlobalStyle.textHeading}>
-                    All Records
-                </Text>
-            </View>
+                <View>
+                    <Text style={GlobalStyle.textHeading}>
+                        All Records
+                    </Text>
+                </View>
 
-            <View>
+                <View style={{marginBottom:50}}>
+                    <FlatList
+                        inverted={true}
+                        data={db}
+                        scrollsToTop={true}
+                        // key={index}
+                        renderItem={
+                            rec => {
+                                return (
+                                    <TouchableOpacity>
+                                        <Record
+                                            iconCategory={rec.item.iconCategory}
+                                            description={rec.item.description}
+                                            income={rec.item.income}
+                                            money={rec.item.money}
+                                        />
+                                    </TouchableOpacity>
 
-                <FlatList
-                    scrollsToTop={true}
-                    inverted={true}
-                    data={db}
-                    // key={index}
-                    renderItem={
-                        rec => {
-                            return (
-                                <TouchableOpacity >
-                                    <Record
-                                        iconCategory={rec.item.iconCategory}
-                                        description={rec.item.description}
-                                        income={rec.item.income}
-                                        money={rec.item.money}
-                                    />
-                                </TouchableOpacity>
-
-                            )
+                                )
+                            }
                         }
-                    }
-                />
-            </View>
+                    />
+                </View>
+                <StatusBar/>
 
-</View>
+            </View>
 
         </View>
     )

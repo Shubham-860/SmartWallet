@@ -8,6 +8,7 @@ import Exp_Inc from "./Components/Dashboard/Modules/Exp_Inc";
 import AllRecords from "./Components/Dashboard/Modules/AllRecords";
 import { Provider } from "react-redux";
 import { Store } from './Components/Redux/Store';
+import LastRecordsOverview from "./Components/Dashboard/Modules/LastRecordsOverview";
 
 
 const Drawer = createDrawerNavigator();
@@ -40,23 +41,12 @@ export default function App() {
                 >
                     <Drawer.Screen name="Profile" component={Profile} />
                     <Drawer.Screen name="Dashboard" component={Dashboard} />
-                    <Drawer.Screen name='Logout' component={Login} />
-                    <Drawer.Screen name='All Records' component={AllRecords} />
+                    <Drawer.Screen name='AllRecords' component={AllRecords} />
                     <Drawer.Screen name="Exp_Inc" component={Exp_Inc} />
+                    <Drawer.Screen name='Logout' component={Login} />
                 </Drawer.Navigator>
             </NavigationContainer>
         </Provider>
 
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#2E2D2D',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }, text: {
-        fontSize: 20
-    }
-});

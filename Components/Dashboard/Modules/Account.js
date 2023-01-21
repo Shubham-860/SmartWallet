@@ -1,22 +1,23 @@
-import { StyleSheet, Text, View } from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
 import CustomButton from "../../Utils/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_TOTAL_BALANCE } from "../../Redux/Actions";
+import { useNavigation } from '@react-navigation/native';
 
 
 
-const Account = ({ navigation }) => {
+const Account = () =>  {
+    const navigation = useNavigation();
 
     const { totalBalance } = useSelector(state => state.userReducer)
-    const dispatch =useDispatch();
 
     const adjustBalance = () => {
         console.log("adjustBalance")
     };
-    const viewRecords = () => {
+    let viewRecords = () => {
         console.log("viewRecords");
-        navigation.navigate('Profile')
+        navigation.navigate("AllRecords");
 
     };
     return (
@@ -27,6 +28,11 @@ const Account = ({ navigation }) => {
             <Text style={styles.text}>
                 ₹ {totalBalance}
             </Text>
+            <TouchableOpacity  onPress={() => navigation.navigate('Exp_Inc')}>
+                <Text style={GlobalStyle.textHeading}>
+                    button
+                </Text>
+            </TouchableOpacity>
             <View style={styles.btn}>
                 <CustomButton
                     title={'Adjust Balance'}

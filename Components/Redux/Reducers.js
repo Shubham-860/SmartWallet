@@ -2,10 +2,10 @@ import { SET_TOTAL_BALANCE, SET_DB } from "./Actions";
 
 
 const initialState = {
-    totalBalance: 100000,
+    totalBalance: 78737272,
     // temp db
     db: [{
-        money: 900,
+        money: 55555,
         income: true,
         iconCategory: "Food & Drinks",
         iconIndex: 0,
@@ -21,6 +21,54 @@ const initialState = {
         date: new Date(),
         time: new Date(),
     },   {
+        money: 900,
+        income: true,
+        iconCategory: "Food & Drinks",
+        iconIndex: 0,
+        description: 'paw Bhaji',
+        date: new Date(),
+        time: new Date(),
+    }, {
+        money: 900,
+        income: true,
+        iconCategory: "Food & Drinks",
+        iconIndex: 0,
+        description: 'paw Bhaji',
+        date: new Date(),
+        time: new Date(),
+    },{
+        money: 900,
+        income: true,
+        iconCategory: "Food & Drinks",
+        iconIndex: 0,
+        description: 'paw Bhaji',
+        date: new Date(),
+        time: new Date(),
+    },{
+        money: 90120,
+        income: false,
+        iconCategory: "Food & Drinks",
+        iconIndex: 0,
+        description: 'paw Bhaji',
+        date: new Date(),
+        time: new Date(),
+    },   {
+        money: 900,
+        income: true,
+        iconCategory: "Food & Drinks",
+        iconIndex: 0,
+        description: 'paw Bhaji',
+        date: new Date(),
+        time: new Date(),
+    }, {
+        money: 900,
+        income: true,
+        iconCategory: "Food & Drinks",
+        iconIndex: 0,
+        description: 'paw Bhaji',
+        date: new Date(),
+        time: new Date(),
+    }, {
         money: 900,
         income: true,
         iconCategory: "Food & Drinks",
