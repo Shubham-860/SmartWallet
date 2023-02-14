@@ -5,17 +5,24 @@ import ExpensesStructure from "./Modules/ExpensesStructure";
 import LastRecordsOverview from "./Modules/LastRecordsOverview";
 import {Ionicons} from "@expo/vector-icons";
 import Exp_Inc from "./Modules/Exp_Inc";
+import {useSelector} from "react-redux";
+import {useEffect} from "react";
 
 const Dashboard = ({navigation}) => {
+    const {db} = useSelector(state => state.userReducer)
+    useEffect(() => {
+
+    }, [db]);
+
     return (
         <View style={[GlobalStyle.mainBody,]}>
-            {/*<ScrollView>*/}
+            <ScrollView>
                 <Account/>
                 <ExpensesStructure/>
                 <LastRecordsOverview/>
-            {/*</ScrollView>*/}
+            </ScrollView>
             {/*Add Button*/}
-            <TouchableOpacity onPress={() => navigation.navigate('ViewRecords')} style={styles.addBtn}>
+            <TouchableOpacity onPress={() => navigation.navigate('Exp_Inc')} style={styles.addBtn}>
                 <Ionicons name={"add-sharp"} color={'white'} size={50}/>
             </TouchableOpacity>
         </View>

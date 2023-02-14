@@ -8,9 +8,16 @@ import {useEffect, useRef, useState} from "react";
 const AllRecords = () => {
 
 
-
     const {db} = useSelector(state => state.userReducer)
+    const flatListRef = useRef(null);
 
+    useEffect(() => {
+        handleRefresh();
+    }, [db]);
+
+    const handleRefresh = () => {
+        flatListRef.current.scrollToOffset({ offset: 80*db.length, animated: true });
+    };
 
 
     return (
@@ -25,9 +32,10 @@ const AllRecords = () => {
 
                 <View style={{marginBottom:50}}>
                     <FlatList
-                        inverted={true}
+                        ref={flatListRef}
+                        inverted
                         data={db}
-                        scrollsToTop={true}
+                        scrollsToTop={false}
                         // key={index}
                         renderItem={
                             rec => {

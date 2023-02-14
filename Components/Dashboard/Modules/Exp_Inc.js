@@ -7,10 +7,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Record from "./SubModules/Record";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_TOTAL_BALANCE, SET_DB, setDB } from "../../Redux/Actions";
+import {useNavigation} from "@react-navigation/native";
 
 
-const Exp_Inc = ({ navigation }) => {
-
+const Exp_Inc = () => {
+    const navigation = useNavigation();
     const { db, totalBalance } = useSelector(state => state.userReducer)
     const dispatch = useDispatch();
 
@@ -73,7 +74,7 @@ const Exp_Inc = ({ navigation }) => {
                 time: selectedTime,
             }]
         ));
-        navigation.navigate('All Records');
+        navigation.navigate('Dashboard');
     }
 
     return (

@@ -2,13 +2,19 @@ import {FlatList, LogBox, StyleSheet, Text, TouchableOpacity, View} from "react-
 import GlobalStyle from "../../Style/GlobalStyle";
 import Record from "./SubModules/Record";
 import {useSelector} from "react-redux";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import AllRecords from "./AllRecords";
+import {useNavigation} from "@react-navigation/native";
 
 
-const LastRecordsOverview = (props,{navigation}) => {
-
+const LastRecordsOverview = (props) => {
+    const navigation = useNavigation();
     const {db} = useSelector(state => state.userReducer)
+    const [data, setData] = useState(db.filter((val, ind) => ind < 5));
+    useEffect(() => {
+        // setData(db.filter((val, ind) => ind < 5))
+    }, [db]);
+
     // console.log(db)
     // useEffect(() => {
     //     LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
@@ -24,10 +30,9 @@ const LastRecordsOverview = (props,{navigation}) => {
             <View style={{flex: 1}}>
 
                 <FlatList
-                    scrollEnabled={false}
-                    initialNumToRender={5}
+
                     inverted={true}
-                    data={db.filter((val, ind) => ind < 5)}
+                    data={db.slice(-5)}
                     // key={index}
                     renderItem={
                         rec => {
@@ -46,7 +51,7 @@ const LastRecordsOverview = (props,{navigation}) => {
                     }
                 />
             </View>
-            <TouchableOpacity onPress={()=>this.props.navigation.navigate('Exp_Inc')}>
+            <TouchableOpacity onPress={()=> navigation.navigate('All Records')}>
                 <Text style={[GlobalStyle.text, {color: 'dodgerblue', fontSize: 18, paddingLeft: 5, marginTop: 5}]}>Show
                     All</Text>
             </TouchableOpacity>

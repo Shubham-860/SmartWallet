@@ -17,7 +17,7 @@ const Account = () =>  {
     };
     let viewRecords = () => {
         console.log("viewRecords");
-        navigation.navigate("AllRecords");
+        navigation.navigate("All Records");
 
     };
     return (
@@ -28,11 +28,11 @@ const Account = () =>  {
             <Text style={styles.text}>
                 ₹ {totalBalance}
             </Text>
-            <TouchableOpacity  onPress={() => navigation.navigate('Exp_Inc')}>
-                <Text style={GlobalStyle.textHeading}>
-                    button
-                </Text>
-            </TouchableOpacity>
+            {/*<TouchableOpacity  onPress={() => navigation.navigate('Exp_Inc')}>*/}
+            {/*    <Text style={GlobalStyle.textHeading}>*/}
+            {/*        button*/}
+            {/*    </Text>*/}
+            {/*</TouchableOpacity>*/}
             <View style={styles.btn}>
                 <CustomButton
                     title={'Adjust Balance'}

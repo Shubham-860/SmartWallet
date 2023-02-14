@@ -39,9 +39,9 @@ export default function App() {
                     }
                     }
                 >
-                    <Drawer.Screen name="Profile" component={Profile} />
                     <Drawer.Screen name="Dashboard" component={Dashboard} />
-                    <Drawer.Screen name='AllRecords' component={AllRecords} />
+                    <Drawer.Screen name="Profile" component={Profile} />
+                    <Drawer.Screen name='All Records' component={AllRecords} />
                     <Drawer.Screen name="Exp_Inc" component={Exp_Inc} />
                     <Drawer.Screen name='Logout' component={Login} />
                 </Drawer.Navigator>
