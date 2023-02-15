@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
+import {NativeModules, ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
 import Account from "./Modules/Account";
 import ExpensesStructure from "./Modules/ExpensesStructure";
@@ -13,6 +13,8 @@ const Dashboard = ({navigation}) => {
     useEffect(() => {
 
     }, [db]);
+
+    
 
     return (
         <View style={[GlobalStyle.mainBody,]}>

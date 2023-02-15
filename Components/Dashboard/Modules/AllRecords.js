@@ -16,7 +16,7 @@ const AllRecords = () => {
     }, [db]);
 
     const handleRefresh = () => {
-        flatListRef.current.scrollToOffset({ offset: 80*db.length, animated: true });
+        flatListRef.current.scrollToOffset({ offset: 100*db.length, animated: true });
     };
 
 

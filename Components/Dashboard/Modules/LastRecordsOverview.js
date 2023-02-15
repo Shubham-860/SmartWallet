@@ -10,7 +10,6 @@ import {useNavigation} from "@react-navigation/native";
 const LastRecordsOverview = (props) => {
     const navigation = useNavigation();
     const {db} = useSelector(state => state.userReducer)
-    const [data, setData] = useState(db.filter((val, ind) => ind < 5));
     useEffect(() => {
         // setData(db.filter((val, ind) => ind < 5))
     }, [db]);
