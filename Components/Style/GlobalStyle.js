@@ -31,6 +31,7 @@ const GlobalStyle = StyleSheet.create({
     textHeading: {
         fontSize: 24,
         color: 'white',
+        // color: '#33d6f3',
         fontWeight: "bold"
     }
 })

@@ -1,4 +1,4 @@
-import {NativeModules, ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
+import {NativeModules, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
 import Account from "./Modules/Account";
 import ExpensesStructure from "./Modules/ExpensesStructure";
@@ -7,19 +7,34 @@ import {Ionicons} from "@expo/vector-icons";
 import Exp_Inc from "./Modules/Exp_Inc";
 import {useSelector} from "react-redux";
 import {useEffect} from "react";
+import {auth} from "../../firebase";
 
 const Dashboard = ({navigation}) => {
+
+
     const {db} = useSelector(state => state.userReducer)
+
+
     useEffect(() => {
-
     }, [db]);
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (!user) {
+                navigation.navigate('Login');
+            }
+        });
 
-    
+        return unsubscribe;
+    }, [navigation]);
+
 
     return (
         <View style={[GlobalStyle.mainBody,]}>
             <ScrollView>
                 <Account/>
+                <Text style={GlobalStyle.text}>
+                    {/*Email: {auth.currentUser?.email}*/}
+                </Text>
                 <ExpensesStructure/>
                 <LastRecordsOverview/>
             </ScrollView>

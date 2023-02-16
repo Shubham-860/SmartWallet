@@ -4,12 +4,23 @@ import {Ionicons} from "@expo/vector-icons";
 import Record from "./SubModules/Record";
 import {useSelector} from "react-redux";
 import {useEffect, useRef, useState} from "react";
+import {auth} from "../../../firebase";
 
-const AllRecords = () => {
+const AllRecords = ({navigation}) => {
 
 
     const {db} = useSelector(state => state.userReducer)
     const flatListRef = useRef(null);
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (!user) {
+                navigation.navigate('Login');
+            }
+        });
+
+        return unsubscribe;
+    }, []);
 
     useEffect(() => {
         handleRefresh();
@@ -35,7 +46,6 @@ const AllRecords = () => {
                         ref={flatListRef}
                         inverted
                         data={db}
-                        scrollsToTop={false}
                         // key={index}
                         renderItem={
                             rec => {

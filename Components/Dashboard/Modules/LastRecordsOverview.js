@@ -11,7 +11,6 @@ const LastRecordsOverview = (props) => {
     const navigation = useNavigation();
     const {db} = useSelector(state => state.userReducer)
     useEffect(() => {
-        // setData(db.filter((val, ind) => ind < 5))
     }, [db]);
 
     // console.log(db)

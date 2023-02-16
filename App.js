@@ -22,7 +22,6 @@ export default function App() {
                 <Drawer.Navigator
 
                     initialRouteName={'Dashboard'}
-                    // initialRouteName={'Exp_Inc'}
                     screenOptions={{
                         drawerStyle: {
                             backgroundColor: 'black',
@@ -34,7 +33,7 @@ export default function App() {
                         drawerActiveBackgroundColor: "#2e2d2d",
                         drawerInactiveTintColor: '#858585',
                         headerStyle: {
-                            backgroundColor: '#2e2d2d',
+                            backgroundColor: 'rgb(31,38,42)',
                         },
                         headerTintColor: 'white',
                     }
@@ -44,10 +43,14 @@ export default function App() {
                     <Drawer.Screen name='All Records' component={AllRecords}/>
                     <Drawer.Screen name="Profile" component={Profile}/>
                     <Drawer.Screen name="Exp_Inc" component={Exp_Inc}
-                                   options={{drawerItemStyle: {display: 'none'}}}
+                                   options={{drawerItemStyle: {display: 'none'},swipeEnabled:false}}
                     />
-                    <Drawer.Screen name='Login' component={Login}/>
-                    <Drawer.Screen name='Logout' component={Logout}/>
+                    <Drawer.Screen name='Login' component={Login}
+                                   options={{headerShown: false, drawerItemStyle: {display: 'none'},swipeEnabled:false}}
+                    />
+                    <Drawer.Screen name='Logout' component={Logout}
+                                options={{headerShown:false,swipeEnabled:false}}
+                    />
                 </Drawer.Navigator>
             </NavigationContainer>
         </Provider>

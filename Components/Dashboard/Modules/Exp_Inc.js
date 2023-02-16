@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Record from "./SubModules/Record";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_TOTAL_BALANCE, SET_DB, setDB } from "../../Redux/Actions";
+import {SET_TOTAL_BALANCE, SET_DB, setDB, setTotalBalance} from "../../Redux/Actions";
 import {useNavigation} from "@react-navigation/native";
 
 
@@ -57,7 +57,7 @@ const Exp_Inc = () => {
 
     const close = () => {
         console.log("close");
-        navigation.navigate('Dashboard');
+        navigation.navigate("Dashboard");
     }
 
 
@@ -74,6 +74,14 @@ const Exp_Inc = () => {
                 time: selectedTime,
             }]
         ));
+        // console.log( 'money : '+money+" : "+ typeof(Number(money)));
+        // console.log("TB :"+typeof(Number(totalBalance)));
+            if (income){
+                dispatch(setTotalBalance (Number(totalBalance+(Number(money)))));
+            }else {
+                dispatch(setTotalBalance (Number(totalBalance-(Number(money)))));
+            }
+
         navigation.navigate('Dashboard');
     }
 
