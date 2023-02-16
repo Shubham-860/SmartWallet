@@ -48,9 +48,9 @@ export default function App() {
                     <Drawer.Screen name='Login' component={Login}
                                    options={{headerShown: false, drawerItemStyle: {display: 'none'},swipeEnabled:false}}
                     />
-                    <Drawer.Screen name='Logout' component={Logout}
-                                options={{headerShown:false,swipeEnabled:false}}
-                    />
+                    {/*<Drawer.Screen name='Logout' component={Logout}*/}
+                    {/*            options={{headerShown:false,swipeEnabled:false}}*/}
+                    {/*/>*/}
                 </Drawer.Navigator>
             </NavigationContainer>
         </Provider>

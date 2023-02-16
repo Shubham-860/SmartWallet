@@ -14,9 +14,9 @@ const LastRecordsOverview = (props) => {
     }, [db]);
 
     // console.log(db)
-    // useEffect(() => {
-    //     LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
-    // }, [db])
+    useEffect(() => {
+        LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
+    }, [db])
     return (
         <View style={[GlobalStyle.body, {flex: 1,height:"100%",width:'100%'}]}>
             <View>

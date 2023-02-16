@@ -7,7 +7,9 @@ const GlobalStyle = StyleSheet.create({
     textInput: {
         borderWidth: 1,
         borderRadius: 5,
-        borderColor: 'white'
+        borderColor: 'white',
+        color:"white",
+
     },
     mainBody: {
         flex: 1,
