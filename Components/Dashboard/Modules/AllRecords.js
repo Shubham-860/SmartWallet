@@ -27,7 +27,7 @@ const AllRecords = ({navigation}) => {
     }, [db]);
 
     const handleRefresh = () => {
-        flatListRef.current.scrollToOffset({ offset: 100*db.length, animated: true });
+        flatListRef.current.scrollToOffset({offset: 100 * db.length, animated: true});
     };
 
 
@@ -41,7 +41,7 @@ const AllRecords = ({navigation}) => {
                     </Text>
                 </View>
 
-                <View style={{marginBottom:50}}>
+                <View style={{marginBottom: 50}}>
                     <FlatList
                         ref={flatListRef}
                         inverted
@@ -49,6 +49,7 @@ const AllRecords = ({navigation}) => {
                         // key={index}
                         renderItem={
                             rec => {
+                                // {console.log(rec.item.id)}
                                 return (
                                     <TouchableOpacity>
                                         <Record

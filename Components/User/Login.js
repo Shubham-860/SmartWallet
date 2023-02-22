@@ -38,8 +38,6 @@ const Login = ({navigation}) => {
     }, []);
 
 
-
-
     const login = async () => {
         console.log("login");
         try {
@@ -51,7 +49,6 @@ const Login = ({navigation}) => {
         }
 
     }
-
 
 
     const register = () => {
@@ -67,16 +64,16 @@ const Login = ({navigation}) => {
     }
 
     return (
-        <View style={[GlobalStyle.mainBody, styles.center,{paddingHorizontal: 0}]}>
-            <View style={[styles.body,{alignItems: "center",borderRadius:0}]}>
+        <View style={[GlobalStyle.mainBody, styles.center, {paddingHorizontal: 0}]}>
+            <View style={[styles.body, {alignItems: "center", borderRadius: 0}]}>
                 <View style={[GlobalStyle.body, styles.center]}>
-                    <Text style={[GlobalStyle.textHeading,styles.header]}>
+                    <Text style={[GlobalStyle.textHeading, styles.header]}>
                         LOGIN
                     </Text>
                 </View>
                 <View>
 
-                    <Text style={[GlobalStyle.text,styles.text]}>
+                    <Text style={[GlobalStyle.text, styles.text]}>
                         Email
                     </Text>
 
@@ -86,35 +83,43 @@ const Login = ({navigation}) => {
                         placeholderTextColor={"#bbbbbb"}
                         onChangeText={x => setEmail(x)}
                         value={email}
+                        autoComplete={"email"}
+                        autoFocus={true}
+                        keyboardType={"email-address"}
+                        textContentType={"emailAddress"}
+                        maxLength={30}
                     />
                 </View>
 
                 <View>
 
-                    <Text style={[GlobalStyle.text,styles.text]}>
+                    <Text style={[GlobalStyle.text, styles.text]}>
                         Password
                     </Text>
 
                     <TextInput
                         style={styles.TextInput}
                         placeholder="Your Password"
-                        secureTextEntry
+                        secureTextEntry={true}
                         placeholderTextColor={"#bbbbbb"}
                         onChangeText={x => setPass(x)}
                         value={pass}
+                        textContentType={"password"}
+                        autoComplete={"password"}
+                        maxLength={20}
                     />
                 </View>
                 <KeyboardAvoidingView style={[styles.center]}>
 
-                    <TouchableOpacity   onPress={login} style={styles.btn} >
-                        <Text style={[GlobalStyle.text]}>
+                    <TouchableOpacity onPress={login} style={styles.btn}>
+                        <Text style={[GlobalStyle.text,styles.text]}>
                             Login
                         </Text>
                     </TouchableOpacity>
 
 
                     <TouchableOpacity onPress={register} style={styles.btn}>
-                        <Text style={[GlobalStyle.text]}>
+                        <Text style={[GlobalStyle.text,styles.text]}>
                             Register
                         </Text>
                     </TouchableOpacity>
@@ -143,12 +148,12 @@ const styles = StyleSheet.create({
         borderColor: '#eeeeee',
         borderWidth: 0.7,
         width: 300,
-        height:35,
+        height: 35,
         margin: 10,
         color: "#FFFFFF",
         paddingLeft: 10,
         borderRadius: 10,
-        backgroundColor:"rgba(0,0,0,0.39)"
+        backgroundColor: "rgba(0,0,0,0.39)"
     },
     center: {
         justifyContent: "center",
@@ -156,23 +161,22 @@ const styles = StyleSheet.create({
     },
     body: {
         width: "100%",
-        flex:1,
-        marginTop:"30%",
-        borderTopLeftRadius:100,
+        flex: 1,
+        marginTop: "30%",
+        borderTopLeftRadius: 100,
 
         backgroundColor: 'black',
         borderRadius: 20,
 
     },
-    text:{
-        paddingLeft:10,
-        fontSize:18,
-        paddingTop:5
+    text: {
+        paddingLeft: 10,
+        fontSize: 18,
     },
-    header:{
-        fontSize:50,
-        marginBottom:20,
-        color:"#33d6f3"
+    header: {
+        fontSize: 50,
+        marginBottom: 20,
+        color: "#33d6f3"
     }
 });
 export default Login;

@@ -34,6 +34,7 @@ const LastRecordsOverview = (props) => {
                     // key={index}
                     renderItem={
                         rec => {
+                            // {console.log(rec.item.id)}
                             return (
                                 <TouchableOpacity >
                                     <Record

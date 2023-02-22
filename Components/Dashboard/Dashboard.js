@@ -30,14 +30,14 @@ const Dashboard = ({navigation}) => {
 
     return (
         <View style={[GlobalStyle.mainBody,]}>
-            <ScrollView>
+            {/*<ScrollView>*/}
                 <Account/>
                 <Text style={GlobalStyle.text}>
                     {/*Email: {auth.currentUser?.email}*/}
                 </Text>
                 <ExpensesStructure/>
                 <LastRecordsOverview/>
-            </ScrollView>
+            {/*</ScrollView>*/}
             {/*Add Button*/}
             <TouchableOpacity onPress={() => navigation.navigate('Exp_Inc')} style={styles.addBtn}>
                 <Ionicons name={"add-sharp"} color={'white'} size={50}/>
