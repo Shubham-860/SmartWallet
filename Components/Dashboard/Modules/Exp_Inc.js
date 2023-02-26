@@ -1,18 +1,22 @@
-import {FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Pressable, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
 import CustomIconButton from "../../Utils/CustomIconButton";
 import {Picker} from "@react-native-picker/picker";
 import {useEffect, useState} from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Record from "./SubModules/Record";
-import {useDispatch, useSelector} from "react-redux";
-import {SET_TOTAL_BALANCE, SET_DB, setDB, setTotalBalance} from "../../Redux/Actions";
-import {useNavigation} from "@react-navigation/native";
+import {useDispatch} from "react-redux";
+import {setTotalBalance} from "../../Redux/Actions";
+import {push, ref, runTransaction, set} from "firebase/database";
+import {auth, db} from "../../../firebase";
+
+const Exp_Inc = ({navigation}) => {
+    // const navigation = useNavigation();
 
 
-const Exp_Inc = () => {
-    const navigation = useNavigation();
-    const {db, totalBalance} = useSelector(state => state.userReducer)
+    // console.log(user.uid)
+
+    // States
+
     const dispatch = useDispatch();
 
     // Income / Expense
@@ -35,11 +39,23 @@ const Exp_Inc = () => {
     const [minutes, setMinutes] = useState(0);
     const [ampm, setAmPm] = useState('');
 
+    let user = auth.currentUser;
+
+    // use Effects
+    useEffect(() => {
+        return auth.onAuthStateChanged(user => {
+            if (!user) {
+                navigation.navigate('Login');
+            }
+            // console.log('user : ',user)
+        });
+    }, [auth]);
+
+
     useEffect(() => {
         setSelectedTime(new Date());
         setSelectedDate(new Date());
     }, []);
-
     useEffect(() => {
         setHours(selectedTime.getHours() % 12 || 12);
         setMinutes(selectedTime.getMinutes());
@@ -60,27 +76,57 @@ const Exp_Inc = () => {
         navigation.navigate("Dashboard");
     }
 
-
-    const add = () => {
+    const addRecord = () => {
         console.log("add")
-        dispatch(setDB([...db, {
-                id: db.length + 1,
-                money: money,
-                income: income,
-                iconCategory: selectedCategory,
-                iconIndex: selectedCategoryIndex,
-                description: desc,
-                date: selectedDate,
-                time: selectedTime,
-            }]
-        ));
-        // console.log( 'money : '+money+" : "+ typeof(Number(money)));
-        // console.log("TB :"+typeof(Number(totalBalance)));
-        if (income) {
-            dispatch(setTotalBalance(Number(totalBalance + (Number(money)))));
-        } else {
-            dispatch(setTotalBalance(Number(totalBalance - (Number(money)))));
+
+        set(push(ref(db, "users/" + user.uid + "/records/")), {
+            money: money,
+            income: income,
+            iconCategory: selectedCategory,
+            iconIndex: selectedCategoryIndex,
+            description: desc,
+            date: selectedDate.toISOString(),
+            time: selectedTime.toISOString(),
+        }).then(r => {
+                console.log("Record added " + r);
+                ToastAndroid.show("Record added", ToastAndroid.SHORT)
+            }
+        )
+        {
+            // dispatch(setDB([...db, {
+            //         money: money,
+            //         income: income,
+            //         iconCategory: selectedCategory,
+            //         iconIndex: selectedCategoryIndex,
+            //         description: desc,
+            //         date: selectedDate,
+            //         time: selectedTime,
+            //     }]
+            // ));
+
+            // console.log( 'money : '+money+" : "+ typeof(Number(money)));
+            // console.log("TB :"+typeof(Number(totalBalance)));
+            // if (income) {
+            //     dispatch(setTotalBalance(Number(totalBalance + (Number(money)))));
+            // } else {
+            //     dispatch(setTotalBalance(Number(totalBalance - (Number(money)))));
+            // }
         }
+
+        runTransaction(ref(db, "users/" + user.uid + "/total/"),
+            (totalBalance) => {
+                if (totalBalance) {
+                    if (income) {
+                        totalBalance = Number(totalBalance + (Number(money)))
+                    } else {
+                        totalBalance = Number(totalBalance - (Number(money)))
+                    }
+                } else {
+                    totalBalance = (Number(money))
+                }
+                dispatch(setTotalBalance(totalBalance));
+                return totalBalance
+            }).then(r => console.log("Total added " + r))
 
         navigation.navigate('Dashboard');
     }
@@ -255,34 +301,12 @@ const Exp_Inc = () => {
                     marginVertical: 30
                 }}>
                     <CustomIconButton name={'close-sharp'} color={'orange'} size={50} onPressFunction={close}/>
-                    <CustomIconButton name={'checkmark-sharp'} color={'green'} size={50} onPressFunction={add}/>
+                    <CustomIconButton name={'checkmark-sharp'} color={'green'} size={50} onPressFunction={addRecord}/>
                 </View>
 
 
             </View>
 
-            {/* Record */}
-
-            {/*<View style={{ flex: 1 }} >*/}
-
-            {/*    <FlatList*/}
-            {/*        inverted={true}*/}
-            {/*        data={db}*/}
-            {/*        // key={index}*/}
-            {/*        renderItem={*/}
-            {/*            rec => {*/}
-            {/*                return (*/}
-            {/*                    <Record*/}
-            {/*                        iconCategory={rec.item.iconCategory}*/}
-            {/*                        description={rec.item.description}*/}
-            {/*                        income={rec.item.income}*/}
-            {/*                        money={rec.item.money}*/}
-            {/*                    />*/}
-            {/*                )*/}
-            {/*            }*/}
-            {/*        }*/}
-            {/*    />*/}
-            {/*</View>*/}
         </View>
     )
 }

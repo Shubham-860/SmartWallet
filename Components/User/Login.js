@@ -1,27 +1,28 @@
 import {
-    Text,
-    View,
+    BackHandler,
+    KeyboardAvoidingView,
     StyleSheet,
-    ImageBackground,
-    Image,
+    Text,
     TextInput,
+    ToastAndroid,
     TouchableOpacity,
-    KeyboardAvoidingView, BackHandler
+    View
 } from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
 import {useEffect, useState} from "react";
 import {auth} from "../../firebase";
+import {ALERT_TYPE, AlertNotificationRoot, Dialog} from "react-native-alert-notification";
 
 const Login = ({navigation}) => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
+        return auth.onAuthStateChanged(user => {
             if (user) {
+                ToastAndroid.show("Welcome",ToastAndroid.SHORT)
                 navigation.navigate('Dashboard');
             }
         })
-        return unsubscribe
     }, [navigation])
 
     useEffect(() => {
@@ -39,15 +40,57 @@ const Login = ({navigation}) => {
 
 
     const login = async () => {
-        console.log("login");
-        try {
-            const userCredentials = await auth.signInWithEmailAndPassword(email, pass);
-            const user = userCredentials.user;
-            console.log('Logged in with:', user.email);
-        } catch (error) {
-            alert(error.message);
-        }
+        // console.log("login");
+        if (email.length > 0 && pass.length > 0) {
+            try {
+                const userCredentials = await auth.signInWithEmailAndPassword(email, pass);
+                const user = userCredentials.user;
+                console.log('Logged in with:', user.email);
+            } catch (error) {
 
+                // alert(error.message);
+                console.log(error.message)
+                let a = "Firebase: The email address is badly formatted. (auth/invalid-email).";
+                let b = "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).";
+                let c = "Firebase: The password is invalid or the user does not have a password. (auth/wrong-password).";
+                if (error.message === a) {
+                    console.log("Please check your Email")
+                    Dialog.show({
+                        type: ALERT_TYPE.WARNING,
+                        title: "Warning",
+                        textBody: "Please check your Email",
+
+                    })
+                } else if (error.message === b) {
+                    console.log("This email is not registered")
+                    Dialog.show({
+                        type: ALERT_TYPE.WARNING,
+                        title: "Warning",
+                        textBody: "This email is not registered",
+                    })
+                } else if (error.message === c) {
+                    console.log("Please check your Password")
+                    Dialog.show({
+                        type: ALERT_TYPE.WARNING,
+                        title: "Warning",
+                        textBody: "Please check your Password",
+                    })
+                } else {
+                    console.log("Something went wrong")
+                    Dialog.show({
+                        type: ALERT_TYPE.WARNING,
+                        title: "Warning",
+                        textBody: "Something went wrong",
+                    })
+                }
+            }
+        } else {
+            Dialog.show({
+                type: ALERT_TYPE.WARNING,
+                title: "Warning",
+                textBody: "Enter Email and password",
+            })
+        }
     }
 
 
@@ -111,15 +154,17 @@ const Login = ({navigation}) => {
                 </View>
                 <KeyboardAvoidingView style={[styles.center]}>
 
-                    <TouchableOpacity onPress={login} style={styles.btn}>
-                        <Text style={[GlobalStyle.text,styles.text]}>
-                            Login
-                        </Text>
-                    </TouchableOpacity>
+                    <AlertNotificationRoot>
+                        <TouchableOpacity onPress={login} style={styles.btn}>
+                            <Text style={[GlobalStyle.text, styles.text]}>
+                                Login
+                            </Text>
+                        </TouchableOpacity>
+                    </AlertNotificationRoot>
 
 
                     <TouchableOpacity onPress={register} style={styles.btn}>
-                        <Text style={[GlobalStyle.text,styles.text]}>
+                        <Text style={[GlobalStyle.text, styles.text]}>
                             Register
                         </Text>
                     </TouchableOpacity>

@@ -50,6 +50,7 @@ const AllRecords = ({navigation}) => {
                         renderItem={
                             rec => {
                                 // {console.log(rec.item.id)}
+                                {console.log(rec.item.date)}
                                 return (
                                     <TouchableOpacity>
                                         <Record

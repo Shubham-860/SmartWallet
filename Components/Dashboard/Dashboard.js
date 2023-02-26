@@ -1,4 +1,4 @@
-import {NativeModules, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
 import Account from "./Modules/Account";
 import ExpensesStructure from "./Modules/ExpensesStructure";
@@ -18,13 +18,11 @@ const Dashboard = ({navigation}) => {
     useEffect(() => {
     }, [db]);
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
+        return auth.onAuthStateChanged(user => {
             if (!user) {
                 navigation.navigate('Login');
             }
         });
-
-        return unsubscribe;
     }, [navigation]);
 
 
@@ -33,7 +31,7 @@ const Dashboard = ({navigation}) => {
             {/*<ScrollView>*/}
                 <Account/>
                 <Text style={GlobalStyle.text}>
-                    {/*Email: {auth.currentUser?.email}*/}
+                    Email: {auth.currentUser?.uid}
                 </Text>
                 <ExpensesStructure/>
                 <LastRecordsOverview/>
