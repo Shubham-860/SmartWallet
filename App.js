@@ -23,7 +23,7 @@ export default function App() {
                 <Drawer.Navigator
 
                     // initialRouteName={'Dashboard'}
-                    initialRouteName={'AddData'}
+                    initialRouteName={'Login'}
                     screenOptions={{
                         drawerStyle: {
                             backgroundColor: 'black',

@@ -16,7 +16,8 @@ const Dashboard = ({navigation}) => {
 
 
     useEffect(() => {
-    }, [db]);
+        navigation.reload;
+    }, [db,auth,navigation]);
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
             if (!user) {

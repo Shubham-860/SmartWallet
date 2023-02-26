@@ -158,7 +158,7 @@ const Record = (props) => {
 
     return (
         <View style={styles.body}>
-            <Pressable style={styles.btn}>
+            <View style={styles.btn}>
                 <View style={{ justifyContent: "space-between", flex: 1, flexDirection: 'row' }}>
 
                     <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -187,7 +187,7 @@ const Record = (props) => {
                 </View>
 
 
-            </Pressable>
+            </View>
         </View>
     )
     // return (

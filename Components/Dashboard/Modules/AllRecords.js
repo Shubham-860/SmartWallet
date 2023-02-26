@@ -1,9 +1,8 @@
-import {FlatList, Image, LogBox, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
-import {Ionicons} from "@expo/vector-icons";
 import Record from "./SubModules/Record";
 import {useSelector} from "react-redux";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 import {auth} from "../../../firebase";
 
 const AllRecords = ({navigation}) => {
@@ -13,13 +12,11 @@ const AllRecords = ({navigation}) => {
     const flatListRef = useRef(null);
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
+        return auth.onAuthStateChanged(user => {
             if (!user) {
-                navigation.navigate('Login');
+                // navigation.navigate('Login');
             }
         });
-
-        return unsubscribe;
     }, []);
 
     useEffect(() => {
@@ -27,7 +24,7 @@ const AllRecords = ({navigation}) => {
     }, [db]);
 
     const handleRefresh = () => {
-        flatListRef.current.scrollToOffset({offset: 100 * db.length, animated: true});
+        // flatListRef.current.scrollToOffset({offset: 100 * db.length, animated: true});
     };
 
 
@@ -50,9 +47,9 @@ const AllRecords = ({navigation}) => {
                         renderItem={
                             rec => {
                                 // {console.log(rec.item.id)}
-                                {console.log(rec.item.date)}
+                                // {console.log(rec.item.date)}
                                 return (
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={()=>console.log("pressed")}>
                                         <Record
                                             iconCategory={rec.item.iconCategory}
                                             description={rec.item.description}
