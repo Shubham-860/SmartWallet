@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, TextInput, Alert, ToastAndroid} from "react-native";
+import {StyleSheet, Text, TextInput, ToastAndroid, View} from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
 import CustomButton from "../Utils/CustomButton";
 import {auth} from "../../firebase";
@@ -6,8 +6,8 @@ import {useState} from "react";
 
 const Profile = ({navigation}) => {
 
-    const logout = () => {
-        auth
+    const logout = async () => {
+        await auth
             .signOut()
             .then(() => {
                 navigation.navigate('Login');
@@ -17,8 +17,10 @@ const Profile = ({navigation}) => {
     }
     const update = () => {
         auth.currentUser.updatePassword(pass)
-            .then(r => {console.log("password updated")
-            ToastAndroid.show("Password Updated",ToastAndroid.LONG)}
+            .then(r => {
+                    console.log("password updated", r)
+                    ToastAndroid.show("Password Updated", ToastAndroid.LONG)
+                }
             )
             .catch((error) => alert(error.message));
     }

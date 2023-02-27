@@ -1,14 +1,17 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
+import {useDispatch} from "react-redux";
 
 const Record = (props) => {
 
-    const [income, setIncome] = useState(() => { if (props.income) { return true } else { return false } });
+    const dispatcher = useDispatch();
 
+    const [income, setIncome] = useState(() => { return !!props.income; });
 
     const [iconName, setIconName] = useState('cube-outline')
     const [iconColorBG, setIconColorBG] = useState('white')
+
 
     useEffect(() => {
         switch (props.iconCategory) {
@@ -149,7 +152,6 @@ const Record = (props) => {
     //                 setIconColorBG('slategray')
     //                 break;
     //             }
-
     //         default: {
     //             break;
     //         }
@@ -190,40 +192,6 @@ const Record = (props) => {
             </View>
         </View>
     )
-    // return (
-    //     <View style={styles.body}>
-    //         <Pressable style={styles.btn}>
-    //             <View style={{ justifyContent: "space-between", flex: 1, flexDirection: 'row' }}>
-
-    //                 <View style={{ flex: 1, flexDirection: 'row' }}>
-    //                     {/*Icon*/}
-    //                     <View style={styles.iconView}>
-    //                         <Ionicons name={'fast-food-outline'} color={'black'} size={40} />
-    //                     </View>
-
-    //                     {/*heading left*/}
-    //                     <View style={{ paddingLeft: 10 }}>
-    //                         <Text style={styles.text}>
-    //                             {'Food'}
-    //                         </Text>
-    //                         <Text style={styles.subtext}>
-    //                             {'Tea'}
-    //                         </Text>
-    //                     </View>
-    //                 </View>
-
-    //                 {/*Heading right*/}
-    //                 <View>
-    //                     <Text style={[styles.text, money ? styles.inc : styles.exp]}>
-    //                         {money ? '' : '-'} ₹ {'100'}
-    //                     </Text>
-    //                 </View>
-    //             </View>
-
-
-    //         </Pressable>
-    //     </View>
-    // )
 }
 const styles = StyleSheet.create({
     body: {

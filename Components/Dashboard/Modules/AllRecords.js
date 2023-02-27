@@ -2,15 +2,17 @@ import {FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View} from "rea
 import GlobalStyle from "../../Style/GlobalStyle";
 import Record from "./SubModules/Record";
 import {useSelector} from "react-redux";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {auth} from "../../../firebase";
 
-const AllRecords = ({navigation}) => {
+const AllRecords = () => {
 
 
     const {db} = useSelector(state => state.userReducer)
     const flatListRef = useRef(null);
 
+    const [dbLength, setDbLength] = useState(db.length);
+    console.log(db.length)
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
             if (!user) {

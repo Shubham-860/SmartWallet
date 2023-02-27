@@ -10,16 +10,50 @@ import {
 } from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
 import {useEffect, useState} from "react";
-import {auth} from "../../firebase";
+import {auth, db} from "../../firebase";
 import {ALERT_TYPE, AlertNotificationRoot, Dialog} from "react-native-alert-notification";
+import {onValue, ref} from "firebase/database";
+import {useDispatch} from "react-redux";
+import {setDB} from "../Redux/Actions";
 
 const Login = ({navigation}) => {
+
+    const dispatch = useDispatch();
+
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
+
+    const [empty, setEmpty] = useState(false);
+    const dbEmpty = (val) => {
+        setEmpty(val)
+    }
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
             if (user) {
-                ToastAndroid.show("Welcome",ToastAndroid.SHORT)
+                ToastAndroid.show("Welcome", ToastAndroid.SHORT)
+                console.log("start")
+
+                // read db
+
+                onValue(ref(db, "users/" + user.uid + "/records/"),
+                    (snapshot) => {
+                        if (snapshot.exists()) {
+                            const data = snapshot.val();
+                            const AllRecords = Object.keys(data).map(key => ({
+                                id: key,
+                                ...data[key]
+                            }));
+                            dispatch(setDB(AllRecords));
+                            console.log("records : " , AllRecords);
+                            dbEmpty(false)
+                        }
+                        else {
+                            dbEmpty(true)
+                            console.log("Empty db")
+                        }
+                    }
+                )
+                console.log("end")
                 navigation.navigate('Dashboard');
             }
         })
@@ -160,14 +194,16 @@ const Login = ({navigation}) => {
                                 Login
                             </Text>
                         </TouchableOpacity>
+                        <TouchableOpacity onPress={register} style={styles.btn}>
+                            <Text style={[GlobalStyle.text, styles.text]}>
+                                Register
+                            </Text>
+                        </TouchableOpacity>
+
                     </AlertNotificationRoot>
 
 
-                    <TouchableOpacity onPress={register} style={styles.btn}>
-                        <Text style={[GlobalStyle.text, styles.text]}>
-                            Register
-                        </Text>
-                    </TouchableOpacity>
+
                 </KeyboardAvoidingView>
             </View>
         </View>

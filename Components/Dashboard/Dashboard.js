@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
 import Account from "./Modules/Account";
 import ExpensesStructure from "./Modules/ExpensesStructure";
@@ -6,17 +6,18 @@ import LastRecordsOverview from "./Modules/LastRecordsOverview";
 import {Ionicons} from "@expo/vector-icons";
 import Exp_Inc from "./Modules/Exp_Inc";
 import {useSelector} from "react-redux";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {auth} from "../../firebase";
 
 const Dashboard = ({navigation}) => {
 
 
     const {db} = useSelector(state => state.userReducer)
-
+    const [user, setUser] = useState(auth.currentUser);
 
     useEffect(() => {
-        navigation.reload;
+        navigation.navigate('Dashboard');
+        console.log("reloaded 'Dashboard'")
     }, [db,auth,navigation]);
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
@@ -29,14 +30,14 @@ const Dashboard = ({navigation}) => {
 
     return (
         <View style={[GlobalStyle.mainBody,]}>
-            {/*<ScrollView>*/}
+            <ScrollView>
                 <Account/>
                 <Text style={GlobalStyle.text}>
-                    Email: {auth.currentUser?.uid}
+                    Email: {user.email}
                 </Text>
                 <ExpensesStructure/>
                 <LastRecordsOverview/>
-            {/*</ScrollView>*/}
+            </ScrollView>
             {/*Add Button*/}
             <TouchableOpacity onPress={() => navigation.navigate('Exp_Inc')} style={styles.addBtn}>
                 <Ionicons name={"add-sharp"} color={'white'} size={50}/>
