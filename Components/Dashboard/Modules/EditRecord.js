@@ -1,36 +1,48 @@
+// noinspection DuplicatedCode
+
 import {Platform, Pressable, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
 import CustomIconButton from "../../Utils/CustomIconButton";
 import {Picker} from "@react-native-picker/picker";
 import {useEffect, useState} from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setTotalBalance} from "../../Redux/Actions";
-import {push, ref, runTransaction, set} from "firebase/database";
-import {auth, db} from "../../../firebase";
-import {containerBg, liteGray, text} from "../../FixColors";
+import {ref, remove, runTransaction, set} from "firebase/database";
+import {auth, db as FBdb} from "../../../firebase";
+import {containerBg, liteGray, text} from "../../FixColors"
 
-const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
+const EditRecord = ({navigation, route}) => {
+    // const navigation = useNavigation();
 
+    let {id} = route.params;
+    console.log(id)
     // console.log(user.uid)
+
+    const dispatch = useDispatch();
+    const {db} = useSelector(state => state.userReducer)
 
     // States
 
-    const dispatch = useDispatch();
-
+    //Previous record
+    const [record, setRecord] = useState(db.find((item) => {
+        if (item.id === id) {
+            return item
+        }
+    }));
     // Income / Expense
-    const [income, setIncome] = useState(false)
+    const [income, setIncome] = useState(record.income)
     // picker
-    const [selectedCategory, setSelectedCategory] = useState('Food & Drinks');
-    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0)
+    const [selectedCategory, setSelectedCategory] = useState(record.iconCategory);
+    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(record.iconIndex)
     // desc
-    const [desc, setDesc] = useState('');
+    const [desc, setDesc] = useState(record.description);
     // money
-    const [money, setMoney] = useState('100');
+    const [money, setMoney] = useState(record.money);
     // date time
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [selectedTime, setSelectedTime] = useState(new Date());
-    console.log(selectedTime)
+    const [selectedDate, setSelectedDate] = useState(new Date(record.date));
+    const [selectedTime, setSelectedTime] = useState(new Date(record.time));
+
 
     // For this page only
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -41,29 +53,31 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
 
     let user = auth.currentUser;
 
-    // use Effects
-    // useEffect(() => {
-    //     return auth.onAuthStateChanged(user => {
-    //         if (!user) {
-    //             navigation.navigate('Login');
-    //         }
-    //         // console.log('user : ',user)
-    //     });
-    // }, [auth]);
+    // useEffects
+    useEffect(() => {
+        recordSelector(id)
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                navigation.navigate('Login');
+            }
+            // console.log('user : ',user)
+        });
+    }, [id, record, auth]);
 
-    useEffect(() => {
-        navigation.navigate('Exp_Inc');
-        console.log("reloaded 'Exp_Inc'")
-    }, [db,navigation]);
-    useEffect(() => {
-        setSelectedTime(new Date());
-        setSelectedDate(new Date());
-    }, []);
+    // console.log(record)
     useEffect(() => {
         setHours(selectedTime.getHours() % 12 || 12);
         setMinutes(selectedTime.getMinutes());
         setAmPm(selectedTime.getHours() >= 12 ? 'PM' : 'AM');
     }, [selectedTime]);
+
+    // useEffect(() => {
+    //     setSelectedTime(new Date());
+    //     setSelectedDate(new Date());
+    // }, []);
+
+
+    // Functions
 
     const toggleDatePicker = () => {
         setIsDatePickerVisible(!isDatePickerVisible);
@@ -74,14 +88,59 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
     };
 
     const close = () => {
-        console.log("close");
+        // console.log("close");
+        setRecord([])
+        setIncome([])
+        setSelectedCategory([])
+        setSelectedCategoryIndex([])
+        setDesc([])
+        setMoney([])
         navigation.navigate("Dashboard");
     }
 
-    const addRecord = () => {
-        console.log("add")
+    const recordSelector = (id) => {
+        let rec = db.find((item) => {
+            if (item.id === id) {
+                return item
+            }
+        })
+        setRecord(rec);
+        setIncome(rec.income)
+        setSelectedCategory(rec.iconCategory)
+        setSelectedCategoryIndex(rec.iconIndex)
+        setDesc(rec.description)
+        setMoney(rec.money)
+        setSelectedDate(new Date(rec.date))
+        setSelectedTime(new Date(rec.time))
+    }
 
-        set(push(ref(db, "users/" + user.uid + "/records/")), {
+    const deleteRecord = async () => {
+        await remove(ref(FBdb, "users/" + user.uid + "/records/" + id))
+            .then(() => {
+                console.log("Record deleted")
+                runTransaction(ref(FBdb, "users/" + user.uid + "/total/"),
+                    (totalBalance) => {
+                        if (totalBalance) {
+
+                            record.income ? totalBalance -= Number(record.money) : totalBalance += Number(record.money);
+
+                        } else {
+                            totalBalance = (Number(money))
+                        }
+                        dispatch(setTotalBalance(totalBalance));
+                        return totalBalance
+                    }).then(r => ToastAndroid.show("Record deleted", ToastAndroid.SHORT))
+            })
+        console.log("Record deleted 2")
+
+        console.log("Record deleted 3")
+        navigation.navigate("Dashboard")
+    }
+
+    const UpdateRecord = () => {
+
+        // update Record
+        set(ref(FBdb, "users/" + user.uid + "/records/" + id), {
             money: money,
             income: income,
             iconCategory: selectedCategory,
@@ -90,28 +149,32 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
             date: selectedDate.toISOString(),
             time: selectedTime.toISOString(),
         }).then(r => {
-                console.log("Record added " + r);
-                ToastAndroid.show("Record added", ToastAndroid.SHORT)
+                console.log("data updated")
             }
-        )
+        );
 
-        runTransaction(ref(db, "users/" + user.uid + "/total/"),
+        // update Total
+        runTransaction(
+            ref(FBdb, "users/" + user.uid + "/total/"),
             (totalBalance) => {
                 if (totalBalance) {
-                    if (income) {
-                        totalBalance = Number(totalBalance + (Number(money)))
-                    } else {
-                        totalBalance = Number(totalBalance - (Number(money)))
-                    }
-                } else {
-                    totalBalance = (Number(money))
-                }
-                dispatch(setTotalBalance(totalBalance));
-                return totalBalance
-            }).then(r => console.log("Total added " + r))
 
+                    record.income ? totalBalance -= Number(record.money) : totalBalance += Number(record.money);
+
+                    income ? totalBalance += Number(money) : totalBalance -= Number(money);
+
+                } else {
+                    console.log("no value in db");
+                }
+
+                dispatch(setTotalBalance(totalBalance));
+                return totalBalance;
+            }
+        ).then((r) => console.log("Total updated " + r));
+        ToastAndroid.show("Data updated", ToastAndroid.SHORT)
         navigation.navigate('Dashboard');
     }
+
 
     return (<>
             {/*Header & add close Buttons*/}
@@ -120,9 +183,11 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
 
                 <CustomIconButton name={'close-sharp'} color={'white'} size={35} onPressFunction={close}/>
 
-                <Text style={[GlobalStyle.textHeading]}> Add Record </Text>
+                <Text style={[GlobalStyle.textHeading]}> Edit Record </Text>
 
-                <CustomIconButton name={'checkmark-sharp'} color={'white'} size={35} onPressFunction={addRecord}/>
+                <CustomIconButton name={'trash-sharp'} color={'white'} size={30} onPressFunction={deleteRecord}/>
+
+                <CustomIconButton name={'checkmark-sharp'} color={'white'} size={35} onPressFunction={UpdateRecord}/>
 
             </View>
 
@@ -245,7 +310,11 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
                                 />
                             )}
                             <Text style={[GlobalStyle.textHeading, styles.textHeading, {width: "100%"}]}>
-                                {selectedDate.toDateString()}
+                                {selectedDate.toLocaleDateString('en-IN', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric'
+                                })}
                             </Text>
                         </TouchableOpacity>
 
@@ -287,6 +356,7 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
 
 
                 </View>
+
             </View>
         </>
     )
@@ -394,4 +464,5 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingHorizontal: 10
     },
-});export default Exp_Inc;
+});
+export default EditRecord;

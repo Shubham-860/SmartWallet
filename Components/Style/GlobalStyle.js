@@ -1,4 +1,5 @@
-import {Platform, StyleSheet} from "react-native";
+import {StyleSheet} from "react-native";
+import {bg, containerBg,} from "../FixColors";
 
 const GlobalStyle = StyleSheet.create({
     text: {
@@ -8,24 +9,24 @@ const GlobalStyle = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         borderColor: 'white',
-        color:"white",
+        color: "white",
 
     },
     mainBody: {
         flex: 1,
         paddingTop: 0,
-        paddingHorizontal:3,
-        backgroundColor: '#2E2D2D',
+        paddingHorizontal: 3,
+        backgroundColor: bg,
     },
     body: {
-        backgroundColor: 'black',
+        backgroundColor: containerBg,
         padding: 20,
         borderRadius: 20,
         marginVertical: 5,
 
     },
     firstBody: {
-        backgroundColor: 'black',
+        backgroundColor: containerBg,
         padding: 20,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20

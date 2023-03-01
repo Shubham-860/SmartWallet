@@ -18,22 +18,29 @@ const Dashboard = ({navigation}) => {
     useEffect(() => {
         navigation.navigate('Dashboard');
         console.log("reloaded 'Dashboard'")
-    }, [db,auth,navigation]);
+    }, [db, auth, navigation]);
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
             if (!user) {
                 navigation.navigate('Login');
             }
         });
-    }, [navigation]);
+    }, [navigation, auth]);
 
+    let mail;
+    try {
+        mail = user.email
+    } catch (e) {
+        navigation.navigate('Login');
+
+    }
 
     return (
         <View style={[GlobalStyle.mainBody,]}>
             <ScrollView>
                 <Account/>
                 <Text style={GlobalStyle.text}>
-                    Email: {user.email}
+                    Email: {mail}
                 </Text>
                 <ExpensesStructure/>
                 <LastRecordsOverview/>

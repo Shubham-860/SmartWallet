@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import {ref, runTransaction} from "firebase/database";
 import {auth, db} from "../../../firebase";
 import {setTotalBalance} from "../../Redux/Actions";
+import {containerBg} from "../../FixColors";
 
 
 const Account = () => {
@@ -59,13 +60,16 @@ const Account = () => {
 
 
     return (
-        <View style={styles.body}>
+        <View style={GlobalStyle.body}>
+            
             <Text style={GlobalStyle.textHeading}>
                 Balance
             </Text>
             <Text style={styles.text}>
                 ₹ {totalBalance}
             </Text>
+
+            {/*Buttons*/}
 
             <View style={styles.btn}>
                 <CustomButton
@@ -85,7 +89,7 @@ const Account = () => {
 
             {/*change Total value*/}
             <View>
-                <Modal transparent={true} visible={visible}>
+                <Modal transparent={true} visible={visible} animationType={"slide"}>
                     <View style={[styles.center, styles.mBg]}>
                         <View style={[GlobalStyle.body, styles.body, styles.mBody]}>
 
@@ -130,8 +134,8 @@ const Account = () => {
 }
 const styles = StyleSheet.create({
     body: {
-        backgroundColor: 'black',
-        padding: 20,
+        backgroundColor: containerBg,
+        paddingVertical: 20,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20
     },
@@ -167,8 +171,17 @@ const styles = StyleSheet.create({
     mBody: {
         height: 200,
         width: "90%",
-        borderColor: '#8a8a8a',
-        borderWidth: 0.5,
+        borderColor: '#2e2d2d',
+        borderWidth: 0.4,
+        shadowColor: "#fdfdfd",
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.34,
+        shadowRadius: 6.27,
+
+        elevation: 10,
     },
     mBtn: {
         flexDirection: "row",

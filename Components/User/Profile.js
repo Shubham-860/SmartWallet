@@ -11,6 +11,7 @@ const Profile = ({navigation}) => {
             .signOut()
             .then(() => {
                 navigation.navigate('Login');
+                ToastAndroid.show("Logged out",ToastAndroid.SHORT)
             })
             .catch((error) => alert(error.message));
         navigation.navigate('Login');

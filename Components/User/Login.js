@@ -1,6 +1,8 @@
 import {
     BackHandler,
+    Image,
     KeyboardAvoidingView,
+    Modal,
     StyleSheet,
     Text,
     TextInput,
@@ -9,12 +11,13 @@ import {
     View
 } from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {auth, db} from "../../firebase";
 import {ALERT_TYPE, AlertNotificationRoot, Dialog} from "react-native-alert-notification";
-import {onValue, ref} from "firebase/database";
+import {onValue, ref, runTransaction} from "firebase/database";
 import {useDispatch} from "react-redux";
-import {setDB} from "../Redux/Actions";
+import {setDB, setTotalBalance} from "../Redux/Actions";
+import {containerBg} from "../FixColors";
 
 const Login = ({navigation}) => {
 
@@ -23,6 +26,8 @@ const Login = ({navigation}) => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
 
+    const passwordIT = useRef(null);
+    const [visible, setVisible] = useState(false);
     const [empty, setEmpty] = useState(false);
     const dbEmpty = (val) => {
         setEmpty(val)
@@ -31,7 +36,6 @@ const Login = ({navigation}) => {
         return auth.onAuthStateChanged(user => {
             if (user) {
                 ToastAndroid.show("Welcome", ToastAndroid.SHORT)
-                console.log("start")
 
                 // read db
 
@@ -44,17 +48,25 @@ const Login = ({navigation}) => {
                                 ...data[key]
                             }));
                             dispatch(setDB(AllRecords));
-                            console.log("records : " , AllRecords);
+                            console.log("records : ", AllRecords.length);
                             dbEmpty(false)
-                        }
-                        else {
+                        } else {
                             dbEmpty(true)
                             console.log("Empty db")
                         }
-                    }
-                )
-                console.log("end")
+                    })
+
+                runTransaction(ref(db, "users/" + user.uid + "/total/"),
+                    (totalBalance) => {
+                        if (!totalBalance) {
+                            totalBalance = 0
+                        }
+                        dispatch(setTotalBalance(totalBalance));
+                        return totalBalance
+                    }).then(r => console.log("Total added ", r))
+
                 navigation.navigate('Dashboard');
+
             }
         })
     }, [navigation])
@@ -72,10 +84,10 @@ const Login = ({navigation}) => {
         return () => backHandler.remove();
     }, []);
 
-
     const login = async () => {
         // console.log("login");
         if (email.length > 0 && pass.length > 0) {
+            setVisible(true)
             try {
                 const userCredentials = await auth.signInWithEmailAndPassword(email, pass);
                 const user = userCredentials.user;
@@ -118,6 +130,9 @@ const Login = ({navigation}) => {
                     })
                 }
             }
+
+            setVisible(false)
+
         } else {
             Dialog.show({
                 type: ALERT_TYPE.WARNING,
@@ -126,7 +141,6 @@ const Login = ({navigation}) => {
             })
         }
     }
-
 
     const register = () => {
         console.log("register")
@@ -148,44 +162,59 @@ const Login = ({navigation}) => {
                         LOGIN
                     </Text>
                 </View>
-                <View>
 
-                    <Text style={[GlobalStyle.text, styles.text]}>
-                        Email
-                    </Text>
-
-                    <TextInput
-                        style={styles.TextInput}
-                        placeholder="Hello@company.com"
-                        placeholderTextColor={"#bbbbbb"}
-                        onChangeText={x => setEmail(x)}
-                        value={email}
-                        autoComplete={"email"}
-                        autoFocus={true}
-                        keyboardType={"email-address"}
-                        textContentType={"emailAddress"}
-                        maxLength={30}
-                    />
-                </View>
+                {/*inputs*/}
 
                 <View>
 
-                    <Text style={[GlobalStyle.text, styles.text]}>
-                        Password
-                    </Text>
+                    {/*Email*/}
+                    <View>
 
-                    <TextInput
-                        style={styles.TextInput}
-                        placeholder="Your Password"
-                        secureTextEntry={true}
-                        placeholderTextColor={"#bbbbbb"}
-                        onChangeText={x => setPass(x)}
-                        value={pass}
-                        textContentType={"password"}
-                        autoComplete={"password"}
-                        maxLength={20}
-                    />
+                        <Text style={[GlobalStyle.text, styles.text]}>
+                            Email
+                        </Text>
+
+                        <TextInput
+                            style={styles.TextInput}
+                            placeholder="Hello@mail.com"
+                            placeholderTextColor={"#bbbbbb"}
+                            onChangeText={x => setEmail(x)}
+                            value={email}
+                            autoComplete={"email"}
+                            autoFocus={true}
+                            keyboardType={"email-address"}
+                            textContentType={"emailAddress"}
+                            maxLength={30}
+                            onSubmitEditing={() => {
+                                passwordIT.current.focus()
+                            }}
+                        />
+                    </View>
+
+                    {/*Password*/}
+                    <View>
+
+                        <Text style={[GlobalStyle.text, styles.text]}>
+                            Password
+                        </Text>
+
+                        <TextInput
+                            style={styles.TextInput}
+                            placeholder="Your Password"
+                            secureTextEntry={true}
+                            placeholderTextColor={"#bbbbbb"}
+                            onChangeText={x => setPass(x)}
+                            value={pass}
+                            textContentType={"password"}
+                            autoComplete={"password"}
+                            maxLength={20}
+                            ref={passwordIT}
+                            onSubmitEditing={login}
+                        />
+                    </View>
                 </View>
+
+                {/*Buttons*/}
                 <KeyboardAvoidingView style={[styles.center]}>
 
                     <AlertNotificationRoot>
@@ -203,8 +232,19 @@ const Login = ({navigation}) => {
                     </AlertNotificationRoot>
 
 
-
                 </KeyboardAvoidingView>
+
+            </View>
+
+            {/*Loading*/}
+            <View>
+                <Modal transparent={true} visible={visible} animationType={"fade"}>
+                    <View style={styles.modelView}>
+                        <Image resizeMode={"contain"} source={require("../../assets/Images/App/Loading_animation.gif")}
+                               style={styles.loading}/>
+                    </View>
+
+                </Modal>
             </View>
         </View>
     )
@@ -234,7 +274,7 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
         paddingLeft: 10,
         borderRadius: 10,
-        backgroundColor: "rgba(0,0,0,0.39)"
+        backgroundColor: "rgb(33,33,33)"
     },
     center: {
         justifyContent: "center",
@@ -245,8 +285,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: "30%",
         borderTopLeftRadius: 100,
-
-        backgroundColor: 'black',
+        backgroundColor: containerBg,
         borderRadius: 20,
 
     },
@@ -258,6 +297,19 @@ const styles = StyleSheet.create({
         fontSize: 50,
         marginBottom: 20,
         color: "#33d6f3"
-    }
+    },
+    modelView: {
+        justifyContent: "center",
+        alignItems: "center",
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.65)",
+    },
+    loading: {
+        width: 300,
+        height: 300,
+        borderRadius: 50
+
+    },
+
 });
 export default Login;

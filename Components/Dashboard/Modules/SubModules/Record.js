@@ -1,13 +1,16 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import {StyleSheet, Text, View} from "react-native";
+import {Ionicons} from "@expo/vector-icons";
+import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
+import {black, containerBg} from "../../../FixColors";
 
 const Record = (props) => {
 
-    const dispatcher = useDispatch();
+    // const dispatcher = useDispatch();
 
-    const [income, setIncome] = useState(() => { return !!props.income; });
+    const [income, setIncome] = useState(() => {
+        return !!props.income;
+    });
 
     const [iconName, setIconName] = useState('cube-outline')
     const [iconColorBG, setIconColorBG] = useState('white')
@@ -15,63 +18,53 @@ const Record = (props) => {
 
     useEffect(() => {
         switch (props.iconCategory) {
-            case 'Food & Drinks':
-            {
+            case 'Food & Drinks': {
                 setIconName('fast-food-outline');
                 setIconColorBG('aqua')
                 break;
             }
-            case 'Shopping':
-            {
+            case 'Shopping': {
                 setIconName('cart-outline');
                 setIconColorBG('bisque')
                 break;
             }
-            case 'Housing':
-            {
+            case 'Housing': {
                 setIconName('home-outline');
                 setIconColorBG('blue')
                 break;
             }
-            case 'Transportation':
-            {
+            case 'Transportation': {
                 setIconName('car-sport-outline');
                 setIconColorBG('violet')
                 break;
             }
 
-            case 'Life & Entertainment':
-            {
+            case 'Life & Entertainment': {
                 setIconName('videocam-outline');
                 setIconColorBG('coral')
                 break;
             }
-            case 'Financial expenses':
-            {
+            case 'Financial expenses': {
                 setIconName('wallet-outline');
                 setIconColorBG('orangered')
                 break;
             }
-            case 'Communication, PC, SmartPhone':
-            {
+            case 'Communication, PC, SmartPhone': {
                 setIconName('wifi-outline');
                 setIconColorBG('thistle')
                 break;
             }
-            case 'Investments':
-            {
+            case 'Investments': {
                 setIconName('logo-bitcoin');
                 setIconColorBG('mediumslateblue')
                 break;
             }
-            case 'Income':
-            {
+            case 'Income': {
                 setIconName('cash-outline');
                 setIconColorBG('springgreen')
                 break;
             }
-            case 'Others':
-            {
+            case 'Others': {
                 setIconName('cube-outline');
                 setIconColorBG('slategray')
                 break;
@@ -161,16 +154,16 @@ const Record = (props) => {
     return (
         <View style={styles.body}>
             <View style={styles.btn}>
-                <View style={{ justifyContent: "space-between", flex: 1, flexDirection: 'row' }}>
+                <View style={{justifyContent: "space-between", flex: 1, flexDirection: 'row'}}>
 
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
                         {/*Icon*/}
-                        <View style={[styles.iconView, { backgroundColor: iconColorBG }]}>
-                            <Ionicons name={iconName} color={'black'} size={35} />
+                        <View style={[styles.iconView, {backgroundColor: iconColorBG}]}>
+                            <Ionicons name={iconName} color={'black'} size={35}/>
                         </View>
 
                         {/*heading left*/}
-                        <View style={{ paddingLeft: 10 }}>
+                        <View style={{paddingLeft: 10}}>
                             <Text style={styles.text}>
                                 {props.iconCategory}
                             </Text>
@@ -195,7 +188,7 @@ const Record = (props) => {
 }
 const styles = StyleSheet.create({
     body: {
-        backgroundColor: 'black',
+        backgroundColor: containerBg,
         paddingBottom: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#8a8a8a'
