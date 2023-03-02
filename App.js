@@ -21,7 +21,7 @@ export default function App() {
                 <Drawer.Navigator
 
                     // initialRouteName={'Dashboard'}
-                    initialRouteName={'Login'}
+                    initialRouteName={'Profile'}
                     screenOptions={{
                         drawerStyle: {
                             backgroundColor: 'black',
@@ -47,8 +47,8 @@ export default function App() {
                     <Drawer.Screen name="SignUp" component={SignUp}
                                    options={{
                                        headerShown: false,
-                                       // drawerItemStyle: {display: 'none'},
-                                       // swipeEnabled: false
+                                       drawerItemStyle: {display: 'none'},
+                                       swipeEnabled: false
                                    }}/>
                     <Drawer.Screen name="Exp_Inc" component={Exp_Inc}
                                    options={{
@@ -57,11 +57,11 @@ export default function App() {
                                        swipeEnabled: false
                                    }}/>
                     <Drawer.Screen name="EditRecord" component={EditRecord}
-                                     options={{
-                                         headerShown: false,
-                                         drawerItemStyle: {display: 'none'},
-                                         swipeEnabled: false
-                                     }}/>
+                                   options={{
+                                       headerShown: false,
+                                       drawerItemStyle: {display: 'none'},
+                                       swipeEnabled: false
+                                   }}/>
                     <Drawer.Screen name='Login' component={Login}
                                    options={{
                                        headerShown: false,

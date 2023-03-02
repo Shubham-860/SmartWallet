@@ -92,7 +92,8 @@ const Login = ({navigation}) => {
                 const userCredentials = await auth.signInWithEmailAndPassword(email, pass);
                 const user = userCredentials.user;
                 console.log('Logged in with:', user.email);
-            } catch (error) {
+            }
+            catch (error) {
 
                 // alert(error.message);
                 console.log(error.message)
@@ -144,7 +145,7 @@ const Login = ({navigation}) => {
 
     const register = () => {
         console.log("register")
-navigation.navigate("SignUp")
+        navigation.navigate("SignUp")
     }
 
     return (
@@ -241,6 +242,7 @@ navigation.navigate("SignUp")
 
                 </Modal>
             </View>
+
         </View>
     )
 }
@@ -269,7 +271,7 @@ const styles = StyleSheet.create({
         borderColor: "rgba(255,255,255,0)",
         borderRadius: 10,
         marginTop: 20,
-        paddingLeft:11,
+        paddingLeft: 11,
         marginHorizontal: 10,
     },
     text2: {

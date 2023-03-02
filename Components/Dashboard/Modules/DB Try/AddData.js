@@ -12,7 +12,7 @@ import {
 import {useEffect, useState} from "react";
 import GlobalStyle from "../../../Style/GlobalStyle";
 import {auth, db} from "../../../../firebase";
-import {onValue, push, ref, remove, runTransaction, set} from "firebase/database"
+import {onValue, push, ref, remove, set} from "firebase/database"
 import {Ionicons} from "@expo/vector-icons";
 import {ALERT_TYPE, AlertNotificationRoot, Dialog} from "react-native-alert-notification";
 
@@ -112,16 +112,21 @@ const AddData = ({navigation}) => {
         );
     }
 
+    useEffect(() => {
+    }, [auth.currentUser?.phoneNumber]);
 
     const forTotal = () => {
-        runTransaction(ref(db, "val/id/"), (num) => {
-            if (num) {
-                num++
-            } else {
-                num = 50
-            }
-            return num
-        }).then(r => console.log("done " + r))
+        auth.currentUser.updateProfile({displayName: auth.currentUser.displayName,
+            photoURL: auth.currentUser.photoURL,phoneNumber:pass}).then(r => console.log("data added", r)).catch(e => console.log(e))
+
+        // runTransaction(ref(db, "val/id/"), (num) => {
+        //     if (num) {
+        //         num++
+        //     } else {
+        //         num = 50
+        //     }
+        //     return num
+        // }).then(r => console.log("done " + r))
     }
 
 
@@ -159,7 +164,7 @@ const AddData = ({navigation}) => {
                 <View>
 
                     <Text style={[GlobalStyle.text, styles.text]}>
-                        Password
+                        Phone number :{auth.currentUser?.phoneNumber}
                     </Text>
 
                     <TextInput

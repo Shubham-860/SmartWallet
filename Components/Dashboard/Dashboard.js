@@ -19,6 +19,7 @@ const Dashboard = ({navigation}) => {
         navigation.navigate('Dashboard');
         console.log("reloaded 'Dashboard'")
     }, [db, auth, navigation]);
+
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
             if (!user) {
@@ -32,7 +33,6 @@ const Dashboard = ({navigation}) => {
         mail = user.email
     } catch (e) {
         navigation.navigate('Login');
-
     }
 
     return (

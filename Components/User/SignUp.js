@@ -3,7 +3,6 @@ import {
     Image,
     KeyboardAvoidingView,
     Modal,
-    StatusBar,
     StyleSheet,
     Text,
     TextInput,
@@ -12,7 +11,7 @@ import {
     View
 } from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {auth, db} from "../../firebase";
 import {ALERT_TYPE, AlertNotificationRoot, Dialog} from "react-native-alert-notification";
 import {useDispatch} from "react-redux";
@@ -73,7 +72,7 @@ const SignUp = ({navigation}) => {
 
             }
         })
-    }, [navigation])
+    }, [navigation, auth])
 
 
     useEffect(() => {
@@ -143,7 +142,7 @@ const SignUp = ({navigation}) => {
                                 title: "Warning",
                                 textBody: "This email is already registered",
                             })
-                        } else  {
+                        } else {
                             alert(error.message)
                             console.log(error)
                         }
@@ -167,6 +166,8 @@ const SignUp = ({navigation}) => {
         <View style={[GlobalStyle.mainBody, styles.center, {paddingHorizontal: 0}]}>
 
             <View style={[styles.body]}>
+
+                {/*Heading*/}
                 <View style={[GlobalStyle.body, styles.center]}>
                     <Text style={[GlobalStyle.textHeading, styles.header]}>
                         SIGNUP
@@ -196,7 +197,6 @@ const SignUp = ({navigation}) => {
                             maxLength={30}
                         />
                     </View>
-
 
                     {/*Username*/}
                     <View>
@@ -261,9 +261,11 @@ const SignUp = ({navigation}) => {
                             </Text>
                         </View> : <View><Text></Text></View>}
                     </View>
+
                 </View>
 
                 {/*Buttons*/}
+
                 <KeyboardAvoidingView style={[styles.center]}>
 
                     <AlertNotificationRoot>
@@ -278,7 +280,6 @@ const SignUp = ({navigation}) => {
 
                 </KeyboardAvoidingView>
 
-
                 {/*Loading*/}
                 <View>
                     <Modal transparent={true} visible={visible} animationType={"fade"}>
@@ -290,8 +291,8 @@ const SignUp = ({navigation}) => {
 
                     </Modal>
                 </View>
+
             </View>
-            <StatusBar backgroundColor={containerBg}/>
 
         </View>
     )
