@@ -34,6 +34,10 @@ const Profile = ({navigation}) => {
             <View style={styles.body}>
                 <Text style={GlobalStyle.text}>Email : {auth.currentUser.email}</Text>
             </View>
+            {/*username*/}
+            <View style={styles.body}>
+                <Text style={GlobalStyle.text}>Username : {auth.currentUser?.displayName}</Text>
+            </View>
             {/*pass*/}
             <View style={[styles.center]}>
                 <View style={styles.body}>

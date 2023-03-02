@@ -3,6 +3,7 @@ import {
     Image,
     KeyboardAvoidingView,
     Modal,
+    StatusBar,
     StyleSheet,
     Text,
     TextInput,
@@ -14,24 +15,27 @@ import GlobalStyle from "../Style/GlobalStyle";
 import {useEffect, useRef, useState} from "react";
 import {auth, db} from "../../firebase";
 import {ALERT_TYPE, AlertNotificationRoot, Dialog} from "react-native-alert-notification";
-import {onValue, ref, runTransaction} from "firebase/database";
 import {useDispatch} from "react-redux";
-import {setDB, setTotalBalance} from "../Redux/Actions";
 import {containerBg} from "../FixColors";
+import {onValue, ref, runTransaction} from "firebase/database";
+import {setDB, setTotalBalance} from "../Redux/Actions";
 
-const Login = ({navigation}) => {
-
+const SignUp = ({navigation}) => {
     const dispatch = useDispatch();
 
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
+    const [cPass, setCPass] = useState('');
+    const [userName, setUserName] = useState('');
 
-    const passwordIT = useRef(null);
+    const [warning, setWarning] = useState(false);
     const [visible, setVisible] = useState(false);
     const [empty, setEmpty] = useState(false);
     const dbEmpty = (val) => {
         setEmpty(val)
     }
+
+
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
             if (user) {
@@ -71,6 +75,16 @@ const Login = ({navigation}) => {
         })
     }, [navigation])
 
+
+    useEffect(() => {
+        if (pass === cPass) {
+            setWarning(false)
+        } else {
+            setWarning(true)
+        }
+    }, [pass, cPass]);
+
+
     useEffect(() => {
         const backAction = () => {
             BackHandler.exitApp();
@@ -84,75 +98,78 @@ const Login = ({navigation}) => {
         return () => backHandler.remove();
     }, []);
 
-    const login = async () => {
-        // console.log("login");
-        if (email.length > 0 && pass.length > 0) {
-            setVisible(true)
-            try {
-                const userCredentials = await auth.signInWithEmailAndPassword(email, pass);
-                const user = userCredentials.user;
-                console.log('Logged in with:', user.email);
-            } catch (error) {
+    const register = async () => {
 
-                // alert(error.message);
-                console.log(error.message)
-                let a = "Firebase: The email address is badly formatted. (auth/invalid-email).";
-                let b = "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).";
-                let c = "Firebase: The password is invalid or the user does not have a password. (auth/wrong-password).";
-                if (error.message === a) {
-                    console.log("Please check your Email")
-                    Dialog.show({
-                        type: ALERT_TYPE.WARNING,
-                        title: "Warning",
-                        textBody: "Please check your Email",
+        if (pass === cPass) {
+            setWarning(false)
+
+            if (email.length > 0 && userName.length > 0 && pass.length > 0 && cPass.length > 0) {
+                setVisible(true)
+                await auth
+                    .createUserWithEmailAndPassword(email, pass)
+                    .then((userCredentials) => {
+                        const user = userCredentials.user;
+                        user.updateProfile({displayName: userName}).then(() => console.log(user.displayName))
+                        console.log('Registered with:', user.email, user.displayName);
+
+                        runTransaction(ref(db, "users/" + user.uid + "/username/"), () => {
+                            return userName
+                        }).then(r => console.log("username added ", r))
+
+                        runTransaction(ref(db, "users/" + user.uid + "/Email/"), () => {
+                            return email
+                        }).then(r => console.log("email added ", r))
+
 
                     })
-                } else if (error.message === b) {
-                    console.log("This email is not registered")
-                    Dialog.show({
-                        type: ALERT_TYPE.WARNING,
-                        title: "Warning",
-                        textBody: "This email is not registered",
-                    })
-                } else if (error.message === c) {
-                    console.log("Please check your Password")
-                    Dialog.show({
-                        type: ALERT_TYPE.WARNING,
-                        title: "Warning",
-                        textBody: "Please check your Password",
-                    })
-                } else {
-                    console.log("Something went wrong")
-                    Dialog.show({
-                        type: ALERT_TYPE.WARNING,
-                        title: "Warning",
-                        textBody: "Something went wrong",
-                    })
-                }
+                    .catch((error) => {
+
+                        // alert(error.message);
+                        console.log(error.message)
+                        let a = "Firebase: The email address is badly formatted. (auth/invalid-email).";
+                        let b = "Firebase: The email address is already in use by another account. (auth/email-already-in-use).";
+                        if (error.message === a) {
+                            console.log("Please check your Email")
+                            Dialog.show({
+                                type: ALERT_TYPE.WARNING,
+                                title: "Warning",
+                                textBody: "Please check your Email",
+
+                            })
+                        } else if (error.message === b) {
+                            console.log("This email is not registered")
+                            Dialog.show({
+                                type: ALERT_TYPE.WARNING,
+                                title: "Warning",
+                                textBody: "This email is already registered",
+                            })
+                        } else  {
+                            alert(error.message)
+                            console.log(error)
+                        }
+
+                    });
+
+                setVisible(false)
+            } else {
+                Dialog.show({
+                    type: ALERT_TYPE.WARNING,
+                    title: "Warning",
+                    textBody: "Input fields are empty",
+                })
             }
-
-            setVisible(false)
-
         } else {
-            Dialog.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Warning",
-                textBody: "Enter Email and password",
-            })
+            setWarning(true)
         }
-    }
-
-    const register = () => {
-        console.log("register")
-navigation.navigate("SignUp")
     }
 
     return (
         <View style={[GlobalStyle.mainBody, styles.center, {paddingHorizontal: 0}]}>
-            <View style={[styles.body, {alignItems: "center", borderRadius: 0}]}>
+
+            <View style={[styles.body]}>
                 <View style={[GlobalStyle.body, styles.center]}>
                     <Text style={[GlobalStyle.textHeading, styles.header]}>
-                        LOGIN
+                        SIGNUP
                     </Text>
                 </View>
 
@@ -174,13 +191,27 @@ navigation.navigate("SignUp")
                             onChangeText={x => setEmail(x)}
                             value={email}
                             autoComplete={"email"}
-                            autoFocus={true}
                             keyboardType={"email-address"}
                             textContentType={"emailAddress"}
                             maxLength={30}
-                            onSubmitEditing={() => {
-                                passwordIT.current.focus()
-                            }}
+                        />
+                    </View>
+
+
+                    {/*Username*/}
+                    <View>
+
+                        <Text style={[GlobalStyle.text, styles.text]}>
+                            User Name
+                        </Text>
+
+                        <TextInput
+                            style={styles.TextInput}
+                            placeholder="User Name"
+                            placeholderTextColor={"#bbbbbb"}
+                            onChangeText={x => setUserName(x)}
+                            value={userName}
+                            maxLength={30}
                         />
                     </View>
 
@@ -192,7 +223,7 @@ navigation.navigate("SignUp")
                         </Text>
 
                         <TextInput
-                            style={styles.TextInput}
+                            style={[styles.TextInput, warning ? styles.warningStyle : {}]}
                             placeholder="Your Password"
                             secureTextEntry={true}
                             placeholderTextColor={"#bbbbbb"}
@@ -201,9 +232,34 @@ navigation.navigate("SignUp")
                             textContentType={"password"}
                             autoComplete={"password"}
                             maxLength={20}
-                            ref={passwordIT}
-                            onSubmitEditing={login}
                         />
+                    </View>
+
+                    {/*Confirm Password*/}
+                    <View>
+
+                        <Text style={[GlobalStyle.text, styles.text]}>
+                            Confirm Password
+                        </Text>
+
+                        <TextInput
+                            style={[styles.TextInput, warning ? styles.warningStyle : {}]}
+                            placeholder="Confirm Password"
+                            secureTextEntry={true}
+                            placeholderTextColor={"#bbbbbb"}
+                            onChangeText={x => setCPass(x)}
+                            value={cPass}
+                            textContentType={"password"}
+                            autoComplete={"password"}
+                            maxLength={20}
+                        />
+
+
+                        {warning ? <View>
+                            <Text style={[styles.text, {color: "red", fontSize: 16, paddingLeft: 10}]}>
+                                Password Didn't Match
+                            </Text>
+                        </View> : <View><Text></Text></View>}
                     </View>
                 </View>
 
@@ -211,36 +267,32 @@ navigation.navigate("SignUp")
                 <KeyboardAvoidingView style={[styles.center]}>
 
                     <AlertNotificationRoot>
-                        <TouchableOpacity onPress={login} style={styles.btn}>
+                        <TouchableOpacity onPress={register} style={styles.btn}>
                             <Text style={[GlobalStyle.text, styles.text]}>
-                                Login
+                                SIGNUP
                             </Text>
                         </TouchableOpacity>
-
-                        <TouchableOpacity onPress={register} style={styles.btn2}>
-                            <Text style={[GlobalStyle.text, styles.text2]}>
-                                Want to get started ? Click create an account now!
-                            </Text>
-                        </TouchableOpacity>
-
 
                     </AlertNotificationRoot>
 
 
                 </KeyboardAvoidingView>
 
-            </View>
 
-            {/*Loading*/}
-            <View>
-                <Modal transparent={true} visible={visible} animationType={"fade"}>
-                    <View style={styles.modelView}>
-                        <Image resizeMode={"contain"} source={require("../../assets/Images/App/Loading_animation.gif")}
-                               style={styles.loading}/>
-                    </View>
+                {/*Loading*/}
+                <View>
+                    <Modal transparent={true} visible={visible} animationType={"fade"}>
+                        <View style={styles.modelView}>
+                            <Image resizeMode={"contain"}
+                                   source={require("../../assets/Images/App/Loading_animation.gif")}
+                                   style={styles.loading}/>
+                        </View>
 
-                </Modal>
+                    </Modal>
+                </View>
             </View>
+            <StatusBar backgroundColor={containerBg}/>
+
         </View>
     )
 }
@@ -260,21 +312,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginHorizontal: 10,
     },
-    btn2: {
-        width: 280,
-        justifyContent: "center",
-        alignItems: "center",
-        alignContent: "center",
-        borderWidth: 1,
-        borderColor: "rgba(255,255,255,0)",
-        borderRadius: 10,
-        marginTop: 20,
-        paddingLeft:11,
-        marginHorizontal: 10,
-    },
-    text2: {
-        fontSize: 18,
-    },
     TextInput: {
         borderColor: '#eeeeee',
         borderWidth: 0.7,
@@ -287,17 +324,17 @@ const styles = StyleSheet.create({
         backgroundColor: "rgb(33,33,33)"
     },
     center: {
-        justifyContent: "center",
         alignItems: "center"
     },
     body: {
         width: "100%",
-        flex: 1,
-        marginTop: "30%",
-        borderTopLeftRadius: 100,
+        height: 670,
+        paddingTop: 5,
+        marginBottom: 100,
+        borderBottomLeftRadius: 100,
         backgroundColor: containerBg,
-        borderRadius: 20,
-
+        alignItems: "center",
+        borderRadius: 0
     },
     text: {
         paddingLeft: 10,
@@ -319,7 +356,10 @@ const styles = StyleSheet.create({
         height: 300,
         borderRadius: 50
 
-    },
+    }, warningStyle: {
+        borderColor: 'red'
+    }
+
 
 });
-export default Login;
+export default SignUp;

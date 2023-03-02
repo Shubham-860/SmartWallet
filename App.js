@@ -9,10 +9,10 @@ import {Provider} from "react-redux";
 import {Store} from './Components/Redux/Store';
 import AddData from "./Components/Dashboard/Modules/DB Try/AddData";
 import EditRecord from "./Components/Dashboard/Modules/EditRecord";
+import SignUp from "./Components/User/SignUp";
 
 
 const Drawer = createDrawerNavigator();
-let login = true
 export default function App() {
     return (
         <Provider store={Store}>
@@ -44,6 +44,12 @@ export default function App() {
                     <Drawer.Screen name='All Records' component={AllRecords}/>
                     <Drawer.Screen name="Profile" component={Profile}/>
                     <Drawer.Screen name="AddData" component={AddData}/>
+                    <Drawer.Screen name="SignUp" component={SignUp}
+                                   options={{
+                                       headerShown: false,
+                                       // drawerItemStyle: {display: 'none'},
+                                       // swipeEnabled: false
+                                   }}/>
                     <Drawer.Screen name="Exp_Inc" component={Exp_Inc}
                                    options={{
                                        headerShown: false,
