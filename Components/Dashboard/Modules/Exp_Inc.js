@@ -104,7 +104,9 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
                         totalBalance = Number(totalBalance - (Number(money)))
                     }
                 } else {
-                    totalBalance = (Number(money))
+                    income?
+                        totalBalance = (Number(money)):
+                        totalBalance = -(Number(money))
                 }
                 dispatch(setTotalBalance(totalBalance));
                 return totalBalance

@@ -28,10 +28,7 @@ const Login = ({navigation}) => {
 
     const passwordIT = useRef(null);
     const [visible, setVisible] = useState(false);
-    const [empty, setEmpty] = useState(false);
-    const dbEmpty = (val) => {
-        setEmpty(val)
-    }
+
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
             if (user) {
@@ -49,9 +46,8 @@ const Login = ({navigation}) => {
                             }));
                             dispatch(setDB(AllRecords));
                             console.log("records : ", AllRecords.length);
-                            dbEmpty(false)
                         } else {
-                            dbEmpty(true)
+                            dispatch(setDB([]));
                             console.log("Empty db")
                         }
                     })

@@ -7,8 +7,8 @@ import {Picker} from "@react-native-picker/picker";
 import {useEffect, useState} from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {useDispatch, useSelector} from "react-redux";
-import {setTotalBalance} from "../../Redux/Actions";
-import {ref, remove, runTransaction, set} from "firebase/database";
+import {setDB, setTotalBalance} from "../../Redux/Actions";
+import {onValue, ref, remove, runTransaction, set} from "firebase/database";
 import {auth, db as FBdb} from "../../../firebase";
 import {containerBg, liteGray, text} from "../../FixColors"
 
@@ -117,7 +117,22 @@ const EditRecord = ({navigation, route}) => {
     const deleteRecord = async () => {
         await remove(ref(FBdb, "users/" + user.uid + "/records/" + id))
             .then(() => {
-                console.log("Record deleted")
+                onValue(ref(FBdb, "users/" + user.uid + "/records/"),
+                    (snapshot) => {
+                        if (snapshot.exists()) {
+                            const data = snapshot.val();
+                            const AllRecords = Object.keys(data).map(key => ({
+                                id: key,
+                                ...data[key]
+                            }));
+                            dispatch(setDB(AllRecords));
+                            console.log("AllRecords :", AllRecords)
+                            console.log("records : ", AllRecords.length);
+                        } else {
+                            console.log("Empty db")
+                        }
+                    })
+
                 runTransaction(ref(FBdb, "users/" + user.uid + "/total/"),
                     (totalBalance) => {
                         if (totalBalance) {
@@ -125,13 +140,12 @@ const EditRecord = ({navigation, route}) => {
                             record.income ? totalBalance -= Number(record.money) : totalBalance += Number(record.money);
 
                         } else {
-                            totalBalance = (Number(money))
+                            console.log("Empty db")
                         }
                         dispatch(setTotalBalance(totalBalance));
                         return totalBalance
                     }).then(r => ToastAndroid.show("Record deleted", ToastAndroid.SHORT))
             })
-        console.log("Record deleted 2")
 
         console.log("Record deleted 3")
         navigation.navigate("Dashboard")

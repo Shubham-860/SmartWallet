@@ -1,16 +1,124 @@
-import {Image, StyleSheet, Text, View} from "react-native";
+import {Dimensions, StyleSheet, Text, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
-import {Ionicons} from "@expo/vector-icons";
+import {useEffect} from "react";
+import {useSelector} from "react-redux";
+import {PieChart} from "react-native-chart-kit";
 
 const ExpensesStructure = () => {
 
-    const adjustBalance = () => {
-        console.log("adjustBalance")
-    };
-    const viewRecords = () => {
-        console.log("viewRecords")
+    const {db} = useSelector(state => state.userReducer)
 
-    };
+    useEffect(() => {
+    }, [db]);
+
+
+    const chartConfig = {
+        backgroundGradientFrom: '#1E2923',
+        backgroundGradientTo: '#08130D',
+        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
+    }
+
+    let thisMonth = new Date().getMonth()
+    const thisYear = new Date().getFullYear()
+
+
+    const colorName = (Category) => {
+        switch (Category) {
+            case 'Food & Drinks': {
+                return ('cyan')
+            }
+            case 'Shopping': {
+                return ('burlywood')
+            }
+            case 'Housing': {
+                return ('blue')
+            }
+            case 'Transportation': {
+                return ('darkviolet')
+            }
+            case 'Life & Entertainment': {
+                return ('coral')
+            }
+            case 'Financial expenses': {
+                return ('orangered')
+            }
+            case 'Communication, PC, SmartPhone': {
+                return ('yellow')
+            }
+            case 'Investments': {
+                return ('green')
+            }
+            case 'Income': {
+                return ('snow')
+            }
+            case 'Others': {
+                return ('slategray')
+            }
+        }
+    }
+
+    //  const colorName = (Category) => {
+    //     switch (Category) {
+    //         case 'Food & Drinks': {
+    //             return ('aqua')
+    //         }
+    //         case 'Shopping': {
+    //             return ('bisque')
+    //         }
+    //         case 'Housing': {
+    //             return ('blue')
+    //         }
+    //         case 'Transportation': {
+    //             return ('violet')
+    //         }
+    //
+    //         case 'Life & Entertainment': {
+    //             return ('coral')
+    //         }
+    //         case 'Financial expenses': {
+    //             return ('orangered')
+    //         }
+    //         case 'Communication, PC, SmartPhone': {
+    //             return ('thistle')
+    //         }
+    //         case 'Investments': {
+    //             return ('mediumslateblue')
+    //         }
+    //         case 'Income': {
+    //             return ('springgreen')
+    //         }
+    //         case 'Others': {
+    //             return ('slategray')
+    //         }
+    //     }
+    // }
+    //
+    const filteredData = db.filter(item => {
+        const date = new Date(item.date);
+        return !item.income && date.getMonth() >= thisMonth && date.getFullYear() === thisYear;
+    }).reduce((acc, item) => {
+        const existing = acc.find(i => i.iconCategory === item.iconCategory);
+        if (existing) {
+            existing.money += Number(item.money);
+        } else {
+            acc.push({iconCategory: item.iconCategory, money: Number(item.money), data: item.date});
+        }
+        return acc;
+    }, []).map(record => (
+        {
+            name: record.iconCategory,
+            money: Number(record.money),
+            color: colorName(record.iconCategory),
+            legendFontColor: '#7F7F7F',
+            legendFontSize: 15
+        }
+    ))
+    const totalMoney = filteredData.reduce((sum, item) => {
+        return sum + Number(item.money)
+    }, 0)
+    console.log("filteredData :", filteredData)
+    console.log("totalMoney :", totalMoney)
+
     return (
         <View style={GlobalStyle.body}>
             <Text style={GlobalStyle.textHeading}>
@@ -18,45 +126,20 @@ const ExpensesStructure = () => {
             </Text>
             <View style={{margin: 5, paddingLeft: 10}}>
                 <Text style={styles.text}>
-                    ₹ {"10000"}
+                    ₹ {totalMoney}
                 </Text>
                 <Text style={styles.subtext}>
-                    Last 30 Days
+                    This Month
                 </Text>
             </View>
-            <View style={{alignItems: "center",}}>
-                <Image style={styles.img} source={require("../../../assets/Images/Temp/chart.png")}/>
-            </View>
-
-
-            <View>
-                <View style={{flexDirection: 'row', paddingLeft: 20}}>
-                    <Ionicons name={'ellipse'} color={'red'} size={20}/>
-                    <Text style={[GlobalStyle.text, {paddingLeft: 15}]}>Food</Text>
-                </View>
-            </View>
-
-            <View>
-                <View style={{flexDirection: 'row', paddingLeft: 20}}>
-                    <Ionicons name={'ellipse'} color={'blue'} size={20}/>
-                    <Text style={[GlobalStyle.text, {paddingLeft: 15}]}>Vehicle</Text>
-                </View>
-            </View>
-
-            <View>
-                <View style={{flexDirection: 'row', paddingLeft: 20}}>
-                    <Ionicons name={'ellipse'} color={'green'} size={20}/>
-                    <Text style={[GlobalStyle.text, {paddingLeft: 15}]}>Financial</Text>
-                </View>
-            </View>
-
-            <View>
-                <View style={{flexDirection: 'row', paddingLeft: 20}}>
-                    <Ionicons name={'ellipse'} color={'yellow'} size={20}/>
-                    <Text style={[GlobalStyle.text, {paddingLeft: 15}]}>Other</Text>
-                </View>
-            </View>
-
+            <PieChart
+                data={filteredData}
+                width={Dimensions.get('window').width - 40}
+                height={220}
+                chartConfig={chartConfig}
+                accessor="money"
+                paddingLeft={'0'}
+                backgroundColor={"transparent"}/>
 
         </View>
     )

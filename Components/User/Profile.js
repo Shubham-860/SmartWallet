@@ -15,6 +15,8 @@ import {useEffect, useState} from "react";
 import {ALERT_TYPE, AlertNotificationRoot, Dialog} from "react-native-alert-notification";
 import {containerBg, liteGray} from "../FixColors";
 import {Ionicons} from "@expo/vector-icons";
+import {useDispatch} from "react-redux";
+import {setDB, setTotalBalance} from "../Redux/Actions";
 
 const Profile = ({navigation}) => {
 
@@ -24,6 +26,7 @@ const Profile = ({navigation}) => {
     const [visible, setVisible] = useState(false);
     const [usernameUpdateModalVisible, setUsernameUpdateModalVisible] = useState(false);
     const [passwordUpdateModalVisible, setPasswordUpdateModalVisible] = useState(false);
+    const dispatch = useDispatch();
 
 
     useEffect(() => {
@@ -60,35 +63,34 @@ const Profile = ({navigation}) => {
         setVisible(false)
     }
     const updatePassword = async () => {
-        if (pass.length>5){
+        if (pass.length > 5) {
             setVisible(true)
-        await user.updatePassword(pass)
-            .then(r => {
-                    console.log("password updated", r)
-                    ToastAndroid.show("Password Updated", ToastAndroid.LONG)
-                    passwordModal()
-                setVisible(false)
-                }
-            )
-            .catch((error) => {
-                let a = "Firebase: This operation is sensitive and requires recent authentication. Log in again before retrying this request. (auth/requires-recent-login)."
-                if(error.message === a){
-                    Dialog.show({
-                        type: ALERT_TYPE.WARNING,
-                        title: "Warning",
-                        textBody: "Sorry, it looks like you need to log in again before completing this action. This is a security measure to protect your account. Please log in again and try your request again.",
-                    })
-                }else {
+            await user.updatePassword(pass)
+                .then(r => {
+                        console.log("password updated", r)
+                        ToastAndroid.show("Password Updated", ToastAndroid.LONG)
+                        passwordModal()
+                        setVisible(false)
+                    }
+                )
+                .catch((error) => {
+                    let a = "Firebase: This operation is sensitive and requires recent authentication. Log in again before retrying this request. (auth/requires-recent-login)."
+                    if (error.message === a) {
+                        Dialog.show({
+                            type: ALERT_TYPE.WARNING,
+                            title: "Warning",
+                            textBody: "Sorry, it looks like you need to log in again before completing this action. This is a security measure to protect your account. Please log in again and try your request again.",
+                        })
+                    } else {
+                        setVisible(false)
+                        console.log(error)
+                        alert(error.message)
+                    }
                     setVisible(false)
-                    console.log(error)
-                    alert(error.message)
-                }
-                setVisible(false)
-                passwordModal()
-            });
+                    passwordModal()
+                });
             setVisible(false)
-        }
-        else  {
+        } else {
             Dialog.show({
                 type: ALERT_TYPE.WARNING,
                 title: "Warning",
@@ -106,8 +108,10 @@ const Profile = ({navigation}) => {
         await auth
             .signOut()
             .then(() => {
-                navigation.navigate('Login');
                 ToastAndroid.show("Logged out", ToastAndroid.SHORT)
+                dispatch(setDB([]));
+                dispatch(setTotalBalance(0));
+                navigation.navigate('Login');
             })
             .catch((error) => alert(error.message));
         navigation.navigate('Login');
@@ -187,14 +191,14 @@ const Profile = ({navigation}) => {
                 <KeyboardAvoidingView style={[styles.center]}>
 
                     <AlertNotificationRoot>
-                        <TouchableOpacity onPress={logout} style={[styles.btn,{width: 300}]}>
+                        <TouchableOpacity onPress={logout} style={[styles.btn, {width: 300}]}>
                             <Text style={[GlobalStyle.text, styles.text]}>
                                 Logout
                             </Text>
                         </TouchableOpacity>
 
                         {user.emailVerified ? null :
-                            <TouchableOpacity onPress={verifyEmail} style={{marginTop: 30,alignItems:'center'}}>
+                            <TouchableOpacity onPress={verifyEmail} style={{marginTop: 30, alignItems: 'center'}}>
                                 <Text style={[GlobalStyle.text, styles.text]}>
                                     Click to verify Email
                                 </Text>
@@ -296,7 +300,8 @@ const Profile = ({navigation}) => {
                     <View>
                         <Modal transparent={true} visible={visible} animationType={"fade"}>
                             <View style={styles.modelView}>
-                                <Image resizeMode={"contain"} source={require("../../assets/Images/App/Loading_animation.gif")}
+                                <Image resizeMode={"contain"}
+                                       source={require("../../assets/Images/App/Loading_animation.gif")}
                                        style={styles.loading}/>
                             </View>
 
@@ -344,7 +349,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 670,
         paddingTop: 5,
-        flex:1,
+        flex: 1,
         marginBottom: 200,
         borderBottomRightRadius: 100,
         backgroundColor: containerBg,
@@ -366,12 +371,6 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: "#33d6f3"
     },
-    modelView: {
-        justifyContent: "center",
-        alignItems: "center",
-        flex: 1,
-        backgroundColor: "rgba(0,0,0,0.65)",
-    },
     loading: {
         width: 300,
         height: 300,
@@ -389,6 +388,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center"
+    },
+    modelView: {
+        justifyContent: "center",
+        alignItems: "center",
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.65)",
     },
     modelBody: {
         height: 250,

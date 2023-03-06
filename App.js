@@ -10,6 +10,7 @@ import {Store} from './Components/Redux/Store';
 import AddData from "./Components/Dashboard/Modules/DB Try/AddData";
 import EditRecord from "./Components/Dashboard/Modules/EditRecord";
 import SignUp from "./Components/User/SignUp";
+import Statistics from "./Components/Dashboard/Modules/Statistics";
 
 
 const Drawer = createDrawerNavigator();
@@ -20,8 +21,8 @@ export default function App() {
             <NavigationContainer>
                 <Drawer.Navigator
 
-                    // initialRouteName={'Dashboard'}
-                    initialRouteName={'Profile'}
+                    initialRouteName={'Dashboard'}
+                    // initialRouteName={'AddData'}
                     screenOptions={{
                         drawerStyle: {
                             backgroundColor: 'black',
@@ -42,8 +43,8 @@ export default function App() {
                 >
                     <Drawer.Screen name="Dashboard" component={Dashboard}/>
                     <Drawer.Screen name='All Records' component={AllRecords}/>
+                    <Drawer.Screen name='Statistics' component={Statistics}/>
                     <Drawer.Screen name="Profile" component={Profile}/>
-                    <Drawer.Screen name="AddData" component={AddData}/>
                     <Drawer.Screen name="SignUp" component={SignUp}
                                    options={{
                                        headerShown: false,
@@ -68,6 +69,11 @@ export default function App() {
                                        drawerItemStyle: {display: 'none'},
                                        swipeEnabled: false
                                    }}/>
+
+
+                    <Drawer.Screen name="AddData" component={AddData}/>
+
+
                     {/*<Drawer.Screen name='Logout' component={Logout}*/}
                     {/*            options={{headerShown:false,swipeEnabled:false}}*/}
                     {/*/>*/}
