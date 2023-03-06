@@ -111,13 +111,15 @@ const Statistics = (props) => {
     const wantTotal = want.reduce((total, item) => total + Number(item.money), 0);
     const needTotal = need.reduce((total, item) => total + Number(item.money), 0);
 
-    const NatureOfSpending = [{
+    const NatureOfSpending = [
+        {
         name: "Must", money: mustTotal, color: "#1aff00", legendFontColor: '#7F7F7F', legendFontSize: 15
     }, {
         name: "Need", money: needTotal, color: "red", legendFontColor: '#7F7F7F', legendFontSize: 15
     }, {
         name: "Want", money: wantTotal, color: "orange", legendFontColor: '#7F7F7F', legendFontSize: 15
-    },]
+    }
+    ]
 
     // console.log("result : ", result);
 
@@ -127,7 +129,8 @@ const Statistics = (props) => {
     }, {
         name: 'Financial expenses',
         description: 'Managing finances is essential for basic survival and long-term stability.'
-    }, {name: 'Income', description: 'This is necessary to cover basic needs and expenses.'},];
+    }, {name: 'Income', description: 'This is necessary to cover basic needs and expenses.'},
+    ];
 
     const Want = [{
         name: 'Food & Drinks',
@@ -141,7 +144,8 @@ const Statistics = (props) => {
     }, {
         name: 'Investments',
         description: "While investing can be a smart financial decision, it's not a necessity for survival."
-    },];
+    },
+    ];
 
     const Need = [{
         name: 'Shopping',
@@ -149,7 +153,8 @@ const Statistics = (props) => {
     }, {
         name: 'Others',
         description: 'This category could include a variety of expenses or activities that are important to individuals, but not essential for survival.'
-    },];
+    },
+    ];
 
     const ExpensesChart = () => {
         return (
@@ -248,34 +253,34 @@ const Statistics = (props) => {
                 </TouchableOpacity>
 
                 {/*Other Chart*/}
-                <View style={GlobalStyle.body}>
-                    <Text style={GlobalStyle.text}>
-                        Bezier Line Chart
-                    </Text>
-                    <LineChart
-                        data={{
-                            labels: ['January', 'February', 'March', 'April', 'May', 'June'], datasets: [{
-                                data: [Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100]
-                            }]
-                        }}
-                        width={Dimensions.get('window').width - 40} // from react-native
-                        height={220}
-                        chartConfig={{
-                            backgroundColor: '#e26a00',
-                            backgroundGradientFrom: '#fb8c00',
-                            backgroundGradientTo: '#ffa726',
-                            decimalPlaces: 2, // optional, defaults to 2dp
-                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            style: {
-                                borderRadius: 16
-                            }
-                        }}
-                        bezier
-                        style={{
-                            marginVertical: 8, borderRadius: 16
-                        }}
-                    />
-                </View>
+                {/*<View style={GlobalStyle.body}>*/}
+                {/*    <Text style={GlobalStyle.text}>*/}
+                {/*        Bezier Line Chart*/}
+                {/*    </Text>*/}
+                {/*    <LineChart*/}
+                {/*        data={{*/}
+                {/*            labels: ['January', 'February', 'March', 'April', 'May', 'June'], datasets: [{*/}
+                {/*                data: [Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100]*/}
+                {/*            }]*/}
+                {/*        }}*/}
+                {/*        width={Dimensions.get('window').width - 40} // from react-native*/}
+                {/*        height={220}*/}
+                {/*        chartConfig={{*/}
+                {/*            backgroundColor: '#e26a00',*/}
+                {/*            backgroundGradientFrom: '#fb8c00',*/}
+                {/*            backgroundGradientTo: '#ffa726',*/}
+                {/*            decimalPlaces: 2, // optional, defaults to 2dp*/}
+                {/*            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,*/}
+                {/*            style: {*/}
+                {/*                borderRadius: 16*/}
+                {/*            }*/}
+                {/*        }}*/}
+                {/*        bezier*/}
+                {/*        style={{*/}
+                {/*            marginVertical: 8, borderRadius: 16*/}
+                {/*        }}*/}
+                {/*    />*/}
+                {/*</View>*/}
 
                 {/*Modal*/}
 
