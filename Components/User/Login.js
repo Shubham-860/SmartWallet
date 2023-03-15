@@ -18,6 +18,7 @@ import {onValue, ref, runTransaction} from "firebase/database";
 import {useDispatch} from "react-redux";
 import {setDB, setTotalBalance} from "../Redux/Actions";
 import {containerBg} from "../FixColors";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
 
@@ -28,14 +29,17 @@ const Login = ({navigation}) => {
 
     const passwordIT = useRef(null);
     const [visible, setVisible] = useState(false);
-
+    const [empty, setEmpty] = useState(false);
+    const dbEmpty = (val) => {
+        setEmpty(val)
+    }
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
             if (user) {
                 ToastAndroid.show("Welcome", ToastAndroid.SHORT)
 
                 // read db
-
+                setVisible(true)
                 onValue(ref(db, "users/" + user.uid + "/records/"),
                     (snapshot) => {
                         if (snapshot.exists()) {
@@ -46,12 +50,14 @@ const Login = ({navigation}) => {
                             }));
                             dispatch(setDB(AllRecords));
                             console.log("records : ", AllRecords.length);
+                            dbEmpty(false)
                         } else {
+                            dbEmpty(true)
                             dispatch(setDB([]));
                             console.log("Empty db")
                         }
                     })
-
+                console.log("Data loaded from login page")
                 runTransaction(ref(db, "users/" + user.uid + "/total/"),
                     (totalBalance) => {
                         if (!totalBalance) {
@@ -59,7 +65,10 @@ const Login = ({navigation}) => {
                         }
                         dispatch(setTotalBalance(totalBalance));
                         return totalBalance
-                    }).then(r => console.log("Total added ", r))
+                    }).then(r => {
+                    console.log("Total added ", r)
+                    setVisible(false)
+                })
 
                 navigation.navigate('Dashboard');
 
@@ -79,17 +88,26 @@ const Login = ({navigation}) => {
         );
         return () => backHandler.remove();
     }, []);
-
+    const storeUserData = async () => {
+        try {
+            await AsyncStorage.setItem('email', email)
+            await AsyncStorage.setItem('pass', pass)
+        } catch (e) {
+            console.log("AsyncStorage : ", e)
+        }
+    }
     const login = async () => {
         // console.log("login");
         if (email.length > 0 && pass.length > 0) {
             setVisible(true)
             try {
-                const userCredentials = await auth.signInWithEmailAndPassword(email, pass);
-                const user = userCredentials.user;
+                await auth.signInWithEmailAndPassword(email, pass)
+                    .then(() => {
+                        storeUserData();
+                    })
+                const user = auth.currentUser;
                 console.log('Logged in with:', user.email);
-            }
-            catch (error) {
+            } catch (error) {
 
                 // alert(error.message);
                 console.log(error.message)
@@ -119,7 +137,7 @@ const Login = ({navigation}) => {
                         textBody: "Please check your Password",
                     })
                 } else {
-                    console.log("Something went wrong")
+                    console.log("Something went wrong: ", error.message)
                     Dialog.show({
                         type: ALERT_TYPE.WARNING,
                         title: "Warning",

@@ -65,27 +65,53 @@ const Statistics = (props) => {
     }
 
 
-    const filteredData = db.filter(item => {
-        const date = new Date(item.date);
-        return !item.income && date.getMonth() >= thisMonth && date.getFullYear() === thisYear;
-    }).reduce((acc, item) => {
-        const existing = acc.find(i => i.iconCategory === item.iconCategory);
-        if (existing) {
-            existing.money += Number(item.money);
-        } else {
-            acc.push({iconCategory: item.iconCategory, money: Number(item.money), data: item.date});
-        }
-        return acc;
-    }, []).map(record => ({
-        name: record.iconCategory,
-        money: Number(record.money),
-        color: colorName(record.iconCategory),
-        legendFontColor: '#7F7F7F',
-        legendFontSize: 15
-    }))
+    const expFilteredData = db
+        .filter(item => {
+            const date = new Date(item.date);
+            return !item.income && date.getMonth() >= thisMonth && date.getFullYear() === thisYear;
+        })
+        .reduce((acc, item) => {
+            const existing = acc.find(i => i.iconCategory === item.iconCategory);
+            if (existing) {
+                existing.money += Number(item.money);
+            } else {
+                acc.push({iconCategory: item.iconCategory, money: Number(item.money), data: item.date});
+            }
+            return acc;
+        }, [])
+        .map(record => ({
+            name: record.iconCategory,
+            money: Number(record.money),
+            color: colorName(record.iconCategory),
+            legendFontColor: '#7F7F7F',
+            legendFontSize: 15
+        }))
 
 
-    const totalExpenses = filteredData.reduce((sum, item) => {
+    const incFilteredData = db
+        .filter(item => {
+            const date = new Date(item.date);
+            return item.income && date.getMonth() >= thisMonth && date.getFullYear() === thisYear;
+        })
+        .reduce((acc, item) => {
+            const existing = acc.find(i => i.iconCategory === item.iconCategory);
+            if (existing) {
+                existing.money += Number(item.money);
+            } else {
+                acc.push({iconCategory: item.iconCategory, money: Number(item.money), data: item.date});
+            }
+            return acc;
+        }, [])
+        .map(record => ({
+            name: record.iconCategory,
+            money: Number(record.money),
+            color: colorName(record.iconCategory),
+            legendFontColor: '#7F7F7F',
+            legendFontSize: 15
+        }))
+
+
+    const totalExpenses = expFilteredData.reduce((sum, item) => {
         return sum + Number(item.money)
     }, 0)
 
@@ -98,14 +124,14 @@ const Statistics = (props) => {
         }
     }, 0)
 
-    // console.log("filteredData :", filteredData)
+    // console.log("expFilteredData :", expFilteredData)
     // console.log("totalExpenses :", totalExpenses)
     // console.log("totalIncome :", totalIncome)
 
 
-    const must = filteredData.filter(item => ['Housing', 'Transportation', 'Financial expenses', 'Income'].includes(item.name));
-    const want = filteredData.filter(item => ['Food & Drinks', 'Life & Entertainment', 'Communication, PC, SmartPhone', 'Investments'].includes(item.name));
-    const need = filteredData.filter(item => ['Shopping', 'Others'].includes(item.name));
+    const must = expFilteredData.filter(item => ['Housing', 'Transportation', 'Financial expenses', 'Income'].includes(item.name));
+    const want = expFilteredData.filter(item => ['Food & Drinks', 'Life & Entertainment', 'Communication, PC, SmartPhone', 'Investments'].includes(item.name));
+    const need = expFilteredData.filter(item => ['Shopping', 'Others'].includes(item.name));
 
     const mustTotal = must.reduce((total, item) => total + Number(item.money), 0);
     const wantTotal = want.reduce((total, item) => total + Number(item.money), 0);
@@ -113,47 +139,50 @@ const Statistics = (props) => {
 
     const NatureOfSpending = [
         {
-        name: "Must", money: mustTotal, color: "#1aff00", legendFontColor: '#7F7F7F', legendFontSize: 15
-    }, {
-        name: "Need", money: needTotal, color: "red", legendFontColor: '#7F7F7F', legendFontSize: 15
-    }, {
-        name: "Want", money: wantTotal, color: "orange", legendFontColor: '#7F7F7F', legendFontSize: 15
-    }
+            name: "Must", money: mustTotal, color: "#1aff00", legendFontColor: '#7F7F7F', legendFontSize: 15
+        }, {
+            name: "Need", money: needTotal, color: "red", legendFontColor: '#7F7F7F', legendFontSize: 15
+        }, {
+            name: "Want", money: wantTotal, color: "orange", legendFontColor: '#7F7F7F', legendFontSize: 15
+        }
     ]
 
     // console.log("result : ", result);
 
-    const Must = [{name: 'Housing', description: 'This is a basic necessity and a fundamental need for survival.'}, {
-        name: 'Transportation, Vehicle',
-        description: 'For many people, having reliable transportation is a must for getting to work or other essential activities.'
-    }, {
-        name: 'Financial expenses',
-        description: 'Managing finances is essential for basic survival and long-term stability.'
-    }, {name: 'Income', description: 'This is necessary to cover basic needs and expenses.'},
+    const Must = [
+        {name: 'Housing', description: 'This is a basic necessity and a fundamental need for survival.'}, {
+            name: 'Transportation, Vehicle',
+            description: 'For many people, having reliable transportation is a must for getting to work or other essential activities.'
+        }, {
+            name: 'Financial expenses',
+            description: 'Managing finances is essential for basic survival and long-term stability.'
+        }, {name: 'Income', description: 'This is necessary to cover basic needs and expenses.'},
     ];
 
-    const Want = [{
-        name: 'Food & Drinks',
-        description: 'While food is a necessity, the specific types of food and drinks people consume can vary based on personal preferences and tastes.'
-    }, {
-        name: 'Life & Entertainment',
-        description: "While it's important to have some leisure time and entertainment, these activities are not essential for survival."
-    }, {
-        name: 'Communication, PC, Smartphone',
-        description: "While these tools can be very useful and convenient, they are not strictly necessary for basic survival."
-    }, {
-        name: 'Investments',
-        description: "While investing can be a smart financial decision, it's not a necessity for survival."
-    },
+    const Want = [
+        {
+            name: 'Food & Drinks',
+            description: 'While food is a necessity, the specific types of food and drinks people consume can vary based on personal preferences and tastes.'
+        }, {
+            name: 'Life & Entertainment',
+            description: "While it's important to have some leisure time and entertainment, these activities are not essential for survival."
+        }, {
+            name: 'Communication, PC, Smartphone',
+            description: "While these tools can be very useful and convenient, they are not strictly necessary for basic survival."
+        }, {
+            name: 'Investments',
+            description: "While investing can be a smart financial decision, it's not a necessity for survival."
+        },
     ];
 
-    const Need = [{
-        name: 'Shopping',
-        description: 'While not strictly necessary, people often need to buy goods and services to meet their basic needs and maintain their lifestyle.'
-    }, {
-        name: 'Others',
-        description: 'This category could include a variety of expenses or activities that are important to individuals, but not essential for survival.'
-    },
+    const Need = [
+        {
+            name: 'Shopping',
+            description: 'While not strictly necessary, people often need to buy goods and services to meet their basic needs and maintain their lifestyle.'
+        }, {
+            name: 'Others',
+            description: 'This category could include a variety of expenses or activities that are important to individuals, but not essential for survival.'
+        },
     ];
 
     const ExpensesChart = () => {
@@ -171,7 +200,7 @@ const Statistics = (props) => {
                     </Text>
                 </View>
                 <PieChart
-                    data={filteredData}
+                    data={expFilteredData}
                     width={Dimensions.get('window').width - 40}
                     height={220}
                     chartConfig={chartConfig}
@@ -182,8 +211,8 @@ const Statistics = (props) => {
                 {props.onlyExp ? <TouchableOpacity
                     style={styles.topLine}
                     onPress={() => navigation.navigate("Statistics")}>
-                    <Text style={[GlobalStyle.text, {color: 'dodgerblue', fontSize: 18, paddingLeft: 5, marginTop: 5}]}>Show
-                        All</Text>
+                    <Text style={[GlobalStyle.text, {color: 'dodgerblue', fontSize: 18, paddingLeft: 5, marginTop: 5}]}>
+                        Show All</Text>
                 </TouchableOpacity> : null}
 
             </View>
@@ -196,10 +225,6 @@ const Statistics = (props) => {
             :
             <ScrollView style={GlobalStyle.mainBody}>
 
-                {/*Pie Chart*/}
-
-                <ExpensesChart/>
-
                 {/*This month inc exp*/}
                 <View style={{flexDirection: "row", justifyContent: "space-evenly"}}>
 
@@ -211,7 +236,10 @@ const Statistics = (props) => {
                             return item.income && date.getMonth() >= thisMonth && date.getFullYear() === thisYear;
                         }).length}
                         </Text>
-                        <Text style={[GlobalStyle.text]}>transactions </Text>
+                        <Text style={[GlobalStyle.text,{fontSize: 16.5,}]}>Transactions </Text>
+                        <Text style={[styles.subtext, {fontSize: 14, fontWeight: "normal"}]}>
+                            In Last 30 Days
+                        </Text>
                     </View>
 
                     <View style={[GlobalStyle.body, {flex: 1, marginHorizontal: 5, paddingLeft: 30}]}>
@@ -222,15 +250,59 @@ const Statistics = (props) => {
                             return !item.income && date.getMonth() >= thisMonth && date.getFullYear() === thisYear;
                         }).length}
                         </Text>
-                        <Text style={[GlobalStyle.text]}>transactions </Text>
+                        <Text style={[GlobalStyle.text,{fontSize: 16.5,}]}>Transactions </Text>
+                        <Text style={[styles.subtext, {fontSize: 14, fontWeight: "normal"}]}>
+                            In Last 30 Days
+                        </Text>
                     </View>
 
 
                 </View>
 
+                {/*Pie Chart*/}
+
+                <ExpensesChart/>
+
+                {/*Income chart*/}
+
+                <View style={GlobalStyle.body}>
+                    <Text style={GlobalStyle.textHeading}>
+                        Income Structure
+                    </Text>
+                    <View style={{margin: 5, paddingLeft: 10}}>
+                        <Text style={styles.text}>
+                            ₹ {totalIncome}
+                        </Text>
+                        <Text style={styles.subtext}>
+                            Last 30 Days
+                        </Text>
+                    </View>
+                    <PieChart
+                        data={incFilteredData}
+                        width={Dimensions.get('window').width - 40}
+                        height={220}
+                        chartConfig={chartConfig}
+                        accessor="money"
+                        paddingLeft={'0'}
+                        backgroundColor={"transparent"}/>
+
+                    {props.onlyExp ? <TouchableOpacity
+                        style={styles.topLine}
+                        onPress={() => navigation.navigate("Statistics")}>
+                        <Text style={[GlobalStyle.text, {
+                            color: 'dodgerblue',
+                            fontSize: 18,
+                            paddingLeft: 5,
+                            marginTop: 5
+                        }]}>
+                            Show All</Text>
+                    </TouchableOpacity> : null}
+
+                </View>
+
                 {/*The Nature Of Spending*/}
 
-                <TouchableOpacity style={GlobalStyle.body} onPress={() => setVisible(true)}>
+                <View style={GlobalStyle.body}>
                     <Text style={GlobalStyle.textHeading}>
                         The Nature of Spending
                     </Text>
@@ -250,7 +322,18 @@ const Statistics = (props) => {
                         accessor="money"
                         paddingLeft={'0'}
                         backgroundColor={"transparent"}/>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.topLine}
+                        onPress={() => setVisible(true)}>
+                        <Text style={[GlobalStyle.text, {
+                            color: 'dodgerblue',
+                            fontSize: 18,
+                            paddingLeft: 5,
+                            marginTop: 5
+                        }]}>
+                            Show Information</Text>
+                    </TouchableOpacity>
+                </View>
 
                 {/*Other Chart*/}
                 {/*<View style={GlobalStyle.body}>*/}

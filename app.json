@@ -2,9 +2,9 @@
   "expo": {
     "name": "SmartWallet",
     "slug": "SmartWallet",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
-    "icon": "./assets/logo1024.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "dark",
     "androidStatusBar": {
       "backgroundColor": "#000000",
@@ -26,12 +26,17 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#2E2D2D"
-      }
+        "foregroundImage": "./assets/logo.png"
+      },
+      "package": "com.max.shubham.SmartWallet"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0d05ef13-88d7-4802-99c9-2375725c48fe"
+      }
     }
   }
 }

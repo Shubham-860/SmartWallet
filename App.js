@@ -70,7 +70,7 @@ export default function App() {
                                        swipeEnabled: false
                                    }}/>
 
-                    <Drawer.Screen name="AddData" component={AddData}/>
+                    {/*<Drawer.Screen name="AddData" component={AddData}/>*/}
 
                     {/*<Drawer.Screen name='Logout' component={Logout}*/}
                     {/*            options={{headerShown:false,swipeEnabled:false}}*/}

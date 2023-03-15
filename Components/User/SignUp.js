@@ -20,6 +20,7 @@ import {onValue, ref, runTransaction} from "firebase/database";
 import {setDB, setTotalBalance} from "../Redux/Actions";
 
 const SignUp = ({navigation}) => {
+
     const dispatch = useDispatch();
 
     const [email, setEmail] = useState("");
@@ -39,34 +40,16 @@ const SignUp = ({navigation}) => {
         return auth.onAuthStateChanged(user => {
             if (user) {
                 ToastAndroid.show("Welcome", ToastAndroid.SHORT)
-
-                // read db
-
-                onValue(ref(db, "users/" + user.uid + "/records/"),
-                    (snapshot) => {
-                        if (snapshot.exists()) {
-                            const data = snapshot.val();
-                            const AllRecords = Object.keys(data).map(key => ({
-                                id: key,
-                                ...data[key]
-                            }));
-                            dispatch(setDB(AllRecords));
-                            console.log("records : ", AllRecords.length);
-                            dbEmpty(false)
-                        } else {
-                            dbEmpty(true)
-                            console.log("Empty db")
-                        }
-                    })
-
-                runTransaction(ref(db, "users/" + user.uid + "/total/"),
-                    (totalBalance) => {
-                        if (!totalBalance) {
-                            totalBalance = 0
-                        }
-                        dispatch(setTotalBalance(totalBalance));
-                        return totalBalance
-                    }).then(r => console.log("Total added ", r))
+                //
+                // // Set total
+                // runTransaction(ref(db, "users/" + user.uid + "/total/"),
+                //     (totalBalance) => {
+                //         if (!totalBalance) {
+                //             totalBalance = 0
+                //         }
+                //         dispatch(setTotalBalance(totalBalance));
+                //         return totalBalance
+                //     }).then(r => console.log("Total added ", r))
 
                 navigation.navigate('Dashboard');
 

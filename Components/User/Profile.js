@@ -17,7 +17,7 @@ import {containerBg, liteGray} from "../FixColors";
 import {Ionicons} from "@expo/vector-icons";
 import {useDispatch} from "react-redux";
 import {setDB, setTotalBalance} from "../Redux/Actions";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Profile = ({navigation}) => {
 
     const [pass, setPass] = useState("");
@@ -63,7 +63,7 @@ const Profile = ({navigation}) => {
         setVisible(false)
     }
     const updatePassword = async () => {
-        if (pass.length > 5) {
+        if (pass.length>5){
             setVisible(true)
             await user.updatePassword(pass)
                 .then(r => {
@@ -75,13 +75,13 @@ const Profile = ({navigation}) => {
                 )
                 .catch((error) => {
                     let a = "Firebase: This operation is sensitive and requires recent authentication. Log in again before retrying this request. (auth/requires-recent-login)."
-                    if (error.message === a) {
+                    if(error.message === a){
                         Dialog.show({
                             type: ALERT_TYPE.WARNING,
                             title: "Warning",
                             textBody: "Sorry, it looks like you need to log in again before completing this action. This is a security measure to protect your account. Please log in again and try your request again.",
                         })
-                    } else {
+                    }else {
                         setVisible(false)
                         console.log(error)
                         alert(error.message)
@@ -90,7 +90,8 @@ const Profile = ({navigation}) => {
                     passwordModal()
                 });
             setVisible(false)
-        } else {
+        }
+        else  {
             Dialog.show({
                 type: ALERT_TYPE.WARNING,
                 title: "Warning",
@@ -111,12 +112,21 @@ const Profile = ({navigation}) => {
                 ToastAndroid.show("Logged out", ToastAndroid.SHORT)
                 dispatch(setDB([]));
                 dispatch(setTotalBalance(0));
+                clearAll();
                 navigation.navigate('Login');
             })
             .catch((error) => alert(error.message));
         navigation.navigate('Login');
     }
+    const clearAll = async () => {
+        try {
+            await AsyncStorage.clear()
+        } catch(e) {
+            console.log("storage not cleared",e)
+        }
 
+        console.log('Done.storage cleared.')
+    }
 
     return (
         <View style={[GlobalStyle.mainBody, styles.center, {paddingHorizontal: 0}]}>
@@ -191,14 +201,14 @@ const Profile = ({navigation}) => {
                 <KeyboardAvoidingView style={[styles.center]}>
 
                     <AlertNotificationRoot>
-                        <TouchableOpacity onPress={logout} style={[styles.btn, {width: 300}]}>
+                        <TouchableOpacity onPress={logout} style={[styles.btn,{width: 300}]}>
                             <Text style={[GlobalStyle.text, styles.text]}>
                                 Logout
                             </Text>
                         </TouchableOpacity>
 
                         {user.emailVerified ? null :
-                            <TouchableOpacity onPress={verifyEmail} style={{marginTop: 30, alignItems: 'center'}}>
+                            <TouchableOpacity onPress={verifyEmail} style={{marginTop: 30,alignItems:'center'}}>
                                 <Text style={[GlobalStyle.text, styles.text]}>
                                     Click to verify Email
                                 </Text>
@@ -300,8 +310,7 @@ const Profile = ({navigation}) => {
                     <View>
                         <Modal transparent={true} visible={visible} animationType={"fade"}>
                             <View style={styles.modelView}>
-                                <Image resizeMode={"contain"}
-                                       source={require("../../assets/Images/App/Loading_animation.gif")}
+                                <Image resizeMode={"contain"} source={require("../../assets/Images/App/Loading_animation.gif")}
                                        style={styles.loading}/>
                             </View>
 
@@ -349,7 +358,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 670,
         paddingTop: 5,
-        flex: 1,
+        flex:1,
         marginBottom: 200,
         borderBottomRightRadius: 100,
         backgroundColor: containerBg,

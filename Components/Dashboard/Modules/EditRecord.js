@@ -90,11 +90,11 @@ const EditRecord = ({navigation, route}) => {
     const close = () => {
         // console.log("close");
         setRecord([])
-        setIncome([])
-        setSelectedCategory([])
-        setSelectedCategoryIndex([])
-        setDesc([])
-        setMoney([])
+        setIncome(0)
+        setSelectedCategory("")
+        setSelectedCategoryIndex(0)
+        setDesc("")
+        setMoney("")
         navigation.navigate("Dashboard");
     }
 
@@ -193,7 +193,7 @@ const EditRecord = ({navigation, route}) => {
     return (<>
             {/*Header & add close Buttons*/}
 
-            <View style={[styles.heading, Platform.OS === 'android' && styles.androidMargin]}>
+            <View style={[styles.heading, Platform.OS === 'android' ? styles.androidMargin:null]}>
 
                 <CustomIconButton name={'close-sharp'} color={'white'} size={35} onPressFunction={close}/>
 
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
         paddingBottom: 8
     },
     androidMargin: {
-        paddingTop: 10,
+        paddingTop: 30,
         paddingHorizontal: 10
     },
 });
