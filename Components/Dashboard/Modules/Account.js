@@ -33,7 +33,7 @@ const Account = () => {
 
     const adjustBalance = () => {
         setVisible(true)
-        console.log("adjustBalance")
+        // console.log("adjustBalance")
     };
     const cansel = () => {
         setVisible(false)
@@ -43,17 +43,15 @@ const Account = () => {
             (balance) => {
                 balance = Number(money)
                 dispatch(setTotalBalance(balance));
-                console.log("updated ", balance)
-                console.log("total ", money, "type :",typeof(balance))
+                console.log("New total : ", balance)
                 return balance
             }
         ).then(r => console.log("Total Balance updated ", r))
-        console.log(money)
         setVisible(false)
         setMoney('')
     }
     let viewRecords = () => {
-        console.log("viewRecords");
+        // console.log("viewRecords");
         navigation.navigate("All Records");
 
     };

@@ -16,7 +16,7 @@ const EditRecord = ({navigation, route}) => {
     // const navigation = useNavigation();
 
     let {id} = route.params;
-    console.log(id)
+    // console.log(id)
     // console.log(user.uid)
 
     const dispatch = useDispatch();
@@ -126,8 +126,8 @@ const EditRecord = ({navigation, route}) => {
                                 ...data[key]
                             }));
                             dispatch(setDB(AllRecords));
-                            console.log("AllRecords :", AllRecords)
-                            console.log("records : ", AllRecords.length);
+                            // console.log("AllRecords :", AllRecords)
+                            // console.log("records : ", AllRecords.length);
                         } else {
                             console.log("Empty db")
                         }
@@ -140,14 +140,13 @@ const EditRecord = ({navigation, route}) => {
                             record.income ? totalBalance -= Number(record.money) : totalBalance += Number(record.money);
 
                         } else {
-                            console.log("Empty db")
+                            console.log("Empty totalBalance")
                         }
                         dispatch(setTotalBalance(totalBalance));
                         return totalBalance
                     }).then(r => ToastAndroid.show("Record deleted", ToastAndroid.SHORT))
             })
 
-        console.log("Record deleted 3")
         navigation.navigate("Dashboard")
     }
 
@@ -258,7 +257,7 @@ const EditRecord = ({navigation, route}) => {
                             onValueChange={(itemValue, itemIndex) => {
                                 setSelectedCategory(itemValue)
                                 setSelectedCategoryIndex(itemIndex)
-                                console.log(selectedCategory)
+                                // console.log(selectedCategory)
                                 // console.log(selectedCategoryIndex)
                             }
                             }>

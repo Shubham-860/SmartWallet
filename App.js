@@ -7,10 +7,10 @@ import Exp_Inc from "./Components/Dashboard/Modules/Exp_Inc";
 import AllRecords from "./Components/Dashboard/Modules/AllRecords";
 import {Provider} from "react-redux";
 import {Store} from './Components/Redux/Store';
-import AddData from "./Components/Dashboard/Modules/DB Try/AddData";
 import EditRecord from "./Components/Dashboard/Modules/EditRecord";
 import SignUp from "./Components/User/SignUp";
 import Statistics from "./Components/Dashboard/Modules/Statistics";
+import ForgotPassword from "./Components/User/ForgotPassword";
 
 
 const Drawer = createDrawerNavigator();
@@ -45,6 +45,7 @@ export default function App() {
                     <Drawer.Screen name='All Records' component={AllRecords}/>
                     <Drawer.Screen name='Statistics' component={Statistics}/>
                     <Drawer.Screen name="Profile" component={Profile}/>
+                    <Drawer.Screen name="ForgotPassword" component={ForgotPassword}/>
                     <Drawer.Screen name="SignUp" component={SignUp}
                                    options={{
                                        headerShown: false,

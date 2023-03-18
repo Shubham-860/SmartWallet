@@ -1,7 +1,6 @@
 import {StyleSheet, Text, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
 import {black, containerBg} from "../../../FixColors";
 
 const Record = (props) => {

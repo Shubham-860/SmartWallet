@@ -63,6 +63,7 @@ const Dashboard = ({navigation}) => {
 
                         }
                     }catch (e) {
+                        setVisible(false)
                         navigation.navigate('Login')
                     }
                 } );
@@ -74,8 +75,9 @@ const Dashboard = ({navigation}) => {
                 //     console.log("Length ==", db.length);
                 //     (db.length === 0)? setEmpty( true):setEmpty( false);
                 // },5000)
-                setVisible(false)
+
             }
+            setVisible(false)
         });
 
     }, [navigation,db, auth]);

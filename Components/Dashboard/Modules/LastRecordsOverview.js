@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ScrollView, Text, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../../Style/GlobalStyle";
 import Record from "./SubModules/Record";
 import {useSelector} from "react-redux";

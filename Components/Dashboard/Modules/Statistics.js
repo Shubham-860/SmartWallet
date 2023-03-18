@@ -11,7 +11,7 @@ const Statistics = (props) => {
     const {db} = useSelector(state => state.userReducer)
     const navigation = useNavigation();
 
-    console.log("props.onlyExp :", props.onlyExp)
+    // console.log("props.onlyExp :", props.onlyExp)
     useEffect(() => {
     }, [db]);
 
@@ -117,7 +117,7 @@ const Statistics = (props) => {
 
     const totalIncome = db.reduce((sum, item) => {
         if (item.income) {
-            console.log(sum)
+            // console.log(sum)
             return sum + Number(item.money)
         } else {
             return sum

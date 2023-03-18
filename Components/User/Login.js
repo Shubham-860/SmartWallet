@@ -49,7 +49,7 @@ const Login = ({navigation}) => {
                                 ...data[key]
                             }));
                             dispatch(setDB(AllRecords));
-                            console.log("records : ", AllRecords.length);
+                            // console.log("records : ", AllRecords.length);
                             dbEmpty(false)
                         } else {
                             dbEmpty(true)
@@ -66,7 +66,7 @@ const Login = ({navigation}) => {
                         dispatch(setTotalBalance(totalBalance));
                         return totalBalance
                     }).then(r => {
-                    console.log("Total added ", r)
+                    // console.log("Total added ", r)
                     setVisible(false)
                 })
 
@@ -158,7 +158,7 @@ const Login = ({navigation}) => {
     }
 
     const register = () => {
-        console.log("register")
+        // console.log("register")
         navigation.navigate("SignUp")
     }
 
@@ -235,6 +235,13 @@ const Login = ({navigation}) => {
                         <TouchableOpacity onPress={register} style={styles.btn2}>
                             <Text style={[GlobalStyle.text, styles.text2]}>
                                 Want to get started ? Click create an account now!
+                            </Text>
+                        </TouchableOpacity>
+
+
+                        <TouchableOpacity onPress={()=>navigation.navigate("ForgotPassword")} style={[styles.btn2,{opacity:0.7}]}>
+                            <Text style={[GlobalStyle.text, styles.text2]}>
+                                Forgot password? Reset now.
                             </Text>
                         </TouchableOpacity>
 

@@ -30,7 +30,7 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
     // date time
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedTime, setSelectedTime] = useState(new Date());
-    console.log(selectedTime)
+    // console.log(selectedTime)
 
     // For this page only
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -53,7 +53,7 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
 
     useEffect(() => {
         navigation.navigate('Exp_Inc');
-        console.log("reloaded 'Exp_Inc'")
+        // console.log("reloaded 'Exp_Inc'")
     }, [db,navigation]);
     useEffect(() => {
         setSelectedTime(new Date());
@@ -74,12 +74,12 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
     };
 
     const close = () => {
-        console.log("close");
+        // console.log("close");
         navigation.navigate("Dashboard");
     }
 
     const addRecord = () => {
-        console.log("add")
+        // console.log("add")
 
         set(push(ref(db, "users/" + user.uid + "/records/")), {
             money: money,
@@ -110,7 +110,9 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
                 }
                 dispatch(setTotalBalance(totalBalance));
                 return totalBalance
-            }).then(r => console.log("Total added " + r))
+            }).then(r => {
+            // console.log("Total added " + r)
+        }).catch(r=>console.log("TotalBalance error, Exp_inc",r))
 
         navigation.navigate('Dashboard');
     }
@@ -118,7 +120,7 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
     return (<>
             {/*Header & add close Buttons*/}
 
-            <View style={[styles.heading, Platform.OS === 'android' && styles.androidMargin]}>
+            <View style={[styles.heading, Platform.OS === 'android' ? styles.androidMargin:null]}>
 
                 <CustomIconButton name={'close-sharp'} color={'white'} size={35} onPressFunction={close}/>
 
@@ -181,7 +183,7 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
                             onValueChange={(itemValue, itemIndex) => {
                                 setSelectedCategory(itemValue)
                                 setSelectedCategoryIndex(itemIndex)
-                                console.log(selectedCategory)
+                                // console.log(selectedCategory)
                                 // console.log(selectedCategoryIndex)
                             }
                             }>
@@ -393,7 +395,7 @@ const styles = StyleSheet.create({
         paddingBottom: 8
     },
     androidMargin: {
-        paddingTop: 10,
+        paddingTop: 30,
         paddingHorizontal: 10
     },
 });export default Exp_Inc;

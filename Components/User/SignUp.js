@@ -16,8 +16,7 @@ import {auth, db} from "../../firebase";
 import {ALERT_TYPE, AlertNotificationRoot, Dialog} from "react-native-alert-notification";
 import {useDispatch} from "react-redux";
 import {containerBg} from "../FixColors";
-import {onValue, ref, runTransaction} from "firebase/database";
-import {setDB, setTotalBalance} from "../Redux/Actions";
+import {ref, runTransaction} from "firebase/database";
 
 const SignUp = ({navigation}) => {
 
@@ -257,11 +256,14 @@ const SignUp = ({navigation}) => {
                                 SIGNUP
                             </Text>
                         </TouchableOpacity>
-
+                        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                            <Text style={[GlobalStyle.text, styles.text2]}>Already a member? Login now.</Text>
+                        </TouchableOpacity>
                     </AlertNotificationRoot>
 
 
                 </KeyboardAvoidingView>
+
 
                 {/*Loading*/}
                 <View>
@@ -323,6 +325,11 @@ const styles = StyleSheet.create({
     text: {
         paddingLeft: 10,
         fontSize: 18,
+    },
+    text2: {
+        fontSize: 18,
+        textAlign: "center",
+        marginTop: 20,
     },
     header: {
         fontSize: 50,

@@ -11,7 +11,7 @@ const AllRecords = ({navigation}) => {
     const {db} = useSelector(state => state.userReducer)
     const flatListRef = useRef(null);
 
-    console.log(db.length)
+    console.log("db.length :",db.length)
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
             if (!user) {
