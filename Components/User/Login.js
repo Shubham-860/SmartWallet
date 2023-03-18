@@ -39,7 +39,7 @@ const Login = ({navigation}) => {
                 ToastAndroid.show("Welcome", ToastAndroid.SHORT)
 
                 // read db
-                setVisible(true)
+                setVisible(false)
                 onValue(ref(db, "users/" + user.uid + "/records/"),
                     (snapshot) => {
                         if (snapshot.exists()) {

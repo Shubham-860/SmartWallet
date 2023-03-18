@@ -1,24 +1,12 @@
-import {
-    Dimensions,
-    Image,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
-} from "react-native";
+import {Dimensions, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import GlobalStyle from "../Style/GlobalStyle";
 import Account from "./Modules/Account";
-import ExpensesStructure from "./Modules/ExpensesStructure";
 import LastRecordsOverview from "./Modules/LastRecordsOverview";
 import {Ionicons} from "@expo/vector-icons";
 import Exp_Inc from "./Modules/Exp_Inc";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import {auth, db as FBdb} from "../../firebase";
-import AddData from "./Modules/DB Try/AddData";
+import {auth} from "../../firebase";
 import Statistics from "./Modules/Statistics";
 import {containerBg} from "../FixColors";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,15 +23,15 @@ const Dashboard = ({navigation}) => {
     useEffect(() => {
         navigation.navigate('Dashboard');
         console.log("reloaded 'Dashboard'")
-    }, [ navigation]);
+    }, [navigation]);
 
     const getData = async () => {
         try {
             email = await AsyncStorage.getItem('email')
             pass = await AsyncStorage.getItem('pass')
-        } catch(e) {
+        } catch (e) {
             // error reading value
-            console.log("AsyncStorage.getItem :",e)
+            console.log("AsyncStorage.getItem :", e)
         }
     }
 
@@ -51,36 +39,36 @@ const Dashboard = ({navigation}) => {
         return auth.onAuthStateChanged(user => {
             setVisible(true)
             if (!user) {
-                getData().then(r =>{
+                getData().then(r => {
                     try {
-                        if(pass == null|| email==null) {
+                        if (pass == null || email == null) {
+                            setVisible(false)
                             navigation.navigate('Login');
-                        }else {
+                        } else {
 
                             auth.signInWithEmailAndPassword(email, pass).then(r => {
                                 setVisible(false)
                             })
 
                         }
-                    }catch (e) {
+                    } catch (e) {
                         setVisible(false)
                         navigation.navigate('Login')
                     }
-                } );
+                });
 
-            }
-            else {
+            } else {
                 mail = user.email;
                 // setTimeout(() => {
                 //     console.log("Length ==", db.length);
                 //     (db.length === 0)? setEmpty( true):setEmpty( false);
                 // },5000)
 
+                setVisible(false)
             }
-            setVisible(false)
         });
 
-    }, [navigation,db, auth]);
+    }, [navigation, db, auth]);
 
     return (
         <View style={[GlobalStyle.mainBody,]}>
@@ -92,7 +80,7 @@ const Dashboard = ({navigation}) => {
                 {/*</Text>*/}
                 {/*<ExpensesStructure/>*/}
                 <Statistics onlyExp={true}/>
-                <TouchableOpacity onPress={()=>navigation.navigate("Statistics")}>
+                <TouchableOpacity onPress={() => navigation.navigate("Statistics")}>
                 </TouchableOpacity>
                 <LastRecordsOverview/>
             </ScrollView>
@@ -134,7 +122,6 @@ const Dashboard = ({navigation}) => {
             </View>
 
 
-
             {/*Loading*/}
             <View>
                 <Modal transparent={true} visible={visible} animationType={"fade"}>
@@ -158,14 +145,14 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         width: 52,
         height: 52,
-        justifyContent:"center",
+        justifyContent: "center",
         alignItems: "center"
     },
-    image:{
-        height:Dimensions.get("window").height,
-        width:Dimensions.get("window").width,
-        padding:0,
-        margin:0
+    image: {
+        height: Dimensions.get("window").height,
+        width: Dimensions.get("window").width,
+        padding: 0,
+        margin: 0
     },
     modelView: {
         justifyContent: "center",
@@ -180,7 +167,7 @@ const styles = StyleSheet.create({
         padding: 20,
         alignItems: "center",
         justifyContent: "center",
-        marginTop:"100%"
+        marginTop: "100%"
     },
     modelHeading: {
         textTransform: "uppercase",
