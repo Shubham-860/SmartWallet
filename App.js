@@ -45,7 +45,12 @@ export default function App() {
                     <Drawer.Screen name='All Records' component={AllRecords}/>
                     <Drawer.Screen name='Statistics' component={Statistics}/>
                     <Drawer.Screen name="Profile" component={Profile}/>
-                    <Drawer.Screen name="ForgotPassword" component={ForgotPassword}/>
+                    <Drawer.Screen name="ForgotPassword" component={ForgotPassword}
+                                   options={{
+                                       headerShown: false,
+                                       drawerItemStyle: {display: 'none'},
+                                       swipeEnabled: false
+                                   }}/>
                     <Drawer.Screen name="SignUp" component={SignUp}
                                    options={{
                                        headerShown: false,
