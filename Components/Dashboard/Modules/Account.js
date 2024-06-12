@@ -59,7 +59,7 @@ const Account = () => {
 
     return (
         <View style={GlobalStyle.body}>
-            
+
             <Text style={GlobalStyle.textHeading}>
                 Balance
             </Text>

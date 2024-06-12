@@ -2,7 +2,7 @@ import {Dimensions, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View}
 import GlobalStyle from "../../Style/GlobalStyle";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import {LineChart, PieChart} from "react-native-chart-kit";
+import {PieChart} from "react-native-chart-kit";
 import {containerBg, liteGray, white} from "../../FixColors";
 import {useNavigation} from "@react-navigation/native";
 
@@ -187,35 +187,42 @@ const Statistics = (props) => {
 
     const ExpensesChart = () => {
         return (
-            <View style={GlobalStyle.body}>
-                <Text style={GlobalStyle.textHeading}>
-                    Expenses Structure
-                </Text>
-                <View style={{margin: 5, paddingLeft: 10}}>
-                    <Text style={styles.text}>
-                        ₹ {totalExpenses}
+
+            <ScrollView horizontal={true}>
+                <View style={GlobalStyle.body}>
+                    <Text style={GlobalStyle.textHeading}>
+                        Expenses Structure
                     </Text>
-                    <Text style={styles.subtext}>
-                        Last 30 Days
-                    </Text>
+                    <View style={{margin: 5, paddingLeft: 10}}>
+                        <Text style={styles.text}>
+                            ₹ {totalExpenses}
+                        </Text>
+                        <Text style={styles.subtext}>
+                            Last 30 Days
+                        </Text>
+                    </View>
+                    <PieChart
+                        data={expFilteredData}
+                        width={Dimensions.get('window').width}
+                        height={220}
+                        chartConfig={chartConfig}
+                        accessor="money"
+                        paddingLeft={'0'}
+                        backgroundColor={"transparent"}/>
+
+                    {props.onlyExp ? <TouchableOpacity
+                        style={styles.topLine}
+                        onPress={() => navigation.navigate("Statistics")}>
+                        <Text style={[GlobalStyle.text, {
+                            color: 'dodgerblue',
+                            fontSize: 18,
+                            paddingLeft: 5,
+                            marginTop: 5
+                        }]}>
+                            Show All</Text>
+                    </TouchableOpacity> : null}
                 </View>
-                <PieChart
-                    data={expFilteredData}
-                    width={Dimensions.get('window').width - 40}
-                    height={220}
-                    chartConfig={chartConfig}
-                    accessor="money"
-                    paddingLeft={'0'}
-                    backgroundColor={"transparent"}/>
-
-                {props.onlyExp ? <TouchableOpacity
-                    style={styles.topLine}
-                    onPress={() => navigation.navigate("Statistics")}>
-                    <Text style={[GlobalStyle.text, {color: 'dodgerblue', fontSize: 18, paddingLeft: 5, marginTop: 5}]}>
-                        Show All</Text>
-                </TouchableOpacity> : null}
-
-            </View>
+            </ScrollView>
         )
     }
 
@@ -223,9 +230,11 @@ const Statistics = (props) => {
         props.onlyExp ?
             <ExpensesChart/>
             :
+
             <ScrollView style={GlobalStyle.mainBody}>
 
                 {/*This month inc exp*/}
+
                 <View style={{flexDirection: "row", justifyContent: "space-evenly"}}>
 
                     <View style={[GlobalStyle.body, {flex: 1, marginHorizontal: 5, paddingLeft: 30}]}>
@@ -236,7 +245,7 @@ const Statistics = (props) => {
                             return item.income && date.getMonth() >= thisMonth && date.getFullYear() === thisYear;
                         }).length}
                         </Text>
-                        <Text style={[GlobalStyle.text,{fontSize: 16.5,}]}>Transactions </Text>
+                        <Text style={[GlobalStyle.text, {fontSize: 16.5,}]}>Transactions </Text>
                         <Text style={[styles.subtext, {fontSize: 14, fontWeight: "normal"}]}>
                             In Last 30 Days
                         </Text>
@@ -250,7 +259,7 @@ const Statistics = (props) => {
                             return !item.income && date.getMonth() >= thisMonth && date.getFullYear() === thisYear;
                         }).length}
                         </Text>
-                        <Text style={[GlobalStyle.text,{fontSize: 16.5,}]}>Transactions </Text>
+                        <Text style={[GlobalStyle.text, {fontSize: 16.5,}]}>Transactions </Text>
                         <Text style={[styles.subtext, {fontSize: 14, fontWeight: "normal"}]}>
                             In Last 30 Days
                         </Text>
@@ -264,7 +273,7 @@ const Statistics = (props) => {
                 <ExpensesChart/>
 
                 {/*Income chart*/}
-
+                <ScrollView horizontal={true}>
                 <View style={GlobalStyle.body}>
                     <Text style={GlobalStyle.textHeading}>
                         Income Structure
@@ -279,7 +288,7 @@ const Statistics = (props) => {
                     </View>
                     <PieChart
                         data={incFilteredData}
-                        width={Dimensions.get('window').width - 40}
+                        width={Dimensions.get('window').width}
                         height={220}
                         chartConfig={chartConfig}
                         accessor="money"
@@ -299,9 +308,9 @@ const Statistics = (props) => {
                     </TouchableOpacity> : null}
 
                 </View>
-
+                </ScrollView>
                 {/*The Nature Of Spending*/}
-
+                {/*    <ScrollView horizontal={true}>*/}
                 <View style={GlobalStyle.body}>
                     <Text style={GlobalStyle.textHeading}>
                         The Nature of Spending
@@ -316,7 +325,7 @@ const Statistics = (props) => {
                     </View>
                     <PieChart
                         data={NatureOfSpending}
-                        width={Dimensions.get('window').width - 40}
+                        width={Dimensions.get('window').width}
                         height={220}
                         chartConfig={chartConfig}
                         accessor="money"
@@ -334,7 +343,7 @@ const Statistics = (props) => {
                             Show Information</Text>
                     </TouchableOpacity>
                 </View>
-
+                    {/*</ScrollView>*/}
                 {/*Other Chart*/}
                 {/*<View style={GlobalStyle.body}>*/}
                 {/*    <Text style={GlobalStyle.text}>*/}
