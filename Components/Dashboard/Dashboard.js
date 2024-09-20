@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Dashboard = ({navigation}) => {
 
+
     let mail;
     const {db} = useSelector(state => state.userReducer)
     const [empty, setEmpty] = useState(false);

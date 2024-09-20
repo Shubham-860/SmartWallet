@@ -7,14 +7,14 @@ import {getDatabase} from "firebase/database"
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyDyGoPXhwwOqTEWaFe6EwJf_jAyrtYjveo",
-    authDomain: "smartwallet-860.firebaseapp.com",
-    databaseURL: "https://smartwallet-860-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "smartwallet-860",
-    storageBucket: "smartwallet-860.appspot.com",
-    messagingSenderId: "241693684212",
-    appId: "1:241693684212:web:49d334174c517adcf309a1",
-    measurementId: "G-BTNDQ38YX8"
+    apiKey : process.env.EXPO_PUBLIC_API_KEY,
+    authDomain : process.env.EXPO_PUBLIC_AUTH_DOMAIN,
+    databaseURL : process.env.EXPO_PUBLIC_DATABASE_URL,
+    projectId : process.env.EXPO_PUBLIC_PROJECT_ID,
+    storageBucket : process.env.EXPO_PUBLIC_STORAGE_BUCKET,
+    messagingSenderId : process.env.EXPO_PUBLIC_MESSAGING_SENDER_ID,
+    appId : process.env.EXPO_PUBLIC_APP_ID,
+    measurementId : process.env.EXPO_PUBLIC_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

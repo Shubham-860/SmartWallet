@@ -10,6 +10,10 @@ const Statistics = (props) => {
 
     const {db} = useSelector(state => state.userReducer)
     const navigation = useNavigation();
+    const dimensions = Dimensions.get('window');
+    // const screenDimensions = Dimensions.get('screen');
+    // console.log("window",dimensions)
+    // console.log("screen",screenDimensions)
 
     // console.log("props.onlyExp :", props.onlyExp)
     useEffect(() => {
@@ -203,7 +207,7 @@ const Statistics = (props) => {
                     </View>
                     <PieChart
                         data={expFilteredData}
-                        width={Dimensions.get('window').width}
+                        width={dimensions.width}
                         height={220}
                         chartConfig={chartConfig}
                         accessor="money"
@@ -288,7 +292,7 @@ const Statistics = (props) => {
                     </View>
                     <PieChart
                         data={incFilteredData}
-                        width={Dimensions.get('window').width}
+                        width={dimensions.width}
                         height={220}
                         chartConfig={chartConfig}
                         accessor="money"
@@ -325,7 +329,7 @@ const Statistics = (props) => {
                     </View>
                     <PieChart
                         data={NatureOfSpending}
-                        width={Dimensions.get('window').width}
+                        width={dimensions.width}
                         height={220}
                         chartConfig={chartConfig}
                         accessor="money"
@@ -355,7 +359,7 @@ const Statistics = (props) => {
                 {/*                data: [Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100, Math.random() * 100]*/}
                 {/*            }]*/}
                 {/*        }}*/}
-                {/*        width={Dimensions.get('window').width - 40} // from react-native*/}
+                {/*        width={screenDimensions.width - 40} // from react-native*/}
                 {/*        height={220}*/}
                 {/*        chartConfig={{*/}
                 {/*            backgroundColor: '#e26a00',*/}

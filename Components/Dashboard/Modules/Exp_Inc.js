@@ -90,7 +90,7 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
             date: selectedDate.toISOString(),
             time: selectedTime.toISOString(),
         }).then(r => {
-                console.log("Record added " + r);
+                console.log("Record added ");
                 ToastAndroid.show("Record added", ToastAndroid.SHORT)
             }
         )
@@ -113,7 +113,8 @@ const Exp_Inc = ({navigation}) => { // const navigation = useNavigation();
             }).then(r => {
             // console.log("Total added " + r)
         }).catch(r=>console.log("TotalBalance error, Exp_inc",r))
-
+        setMoney('100')
+        setDesc('')
         navigation.navigate('Dashboard');
     }
 
