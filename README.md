@@ -28,7 +28,7 @@ A **user-friendly** and **ad-free** mobile application built with **React Native
 
 <p align="center">
   <img src="./assets/Images/App/Dashboard.png" alt="SmartWallet Dashboard" width="150" />
-  <img src="./assets/Images/App/recoards.pngg" alt="SmartWallet All Records Screen" width="150" />
+  <img src="./assets/Images/App/recoards.png" alt="SmartWallet All Records Screen" width="150" />
   <img src="./assets/Images/App/Login.png" alt="SmartWallet Login Screen" width="150" />
   <img src="./assets/Images/App/Signup.png" alt="SmartWallet Signup Screen" width="150" />
   <img src="./assets/Images/App/Entry.png" alt="SmartWallet Add Record Screen" width="150" />
